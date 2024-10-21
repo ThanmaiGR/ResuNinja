@@ -1,0 +1,62 @@
+/* Sidebar Container */
+.sidebar {
+  width: 60px;
+  height: 100vh;
+  background-color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  transition: width 0.3s;
+}
+
+/* Open State */
+.sidebar.open {
+  width: 200px;
+}
+
+/* Menu Items */
+.menu {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.menu li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menu li:hover {
+  background-color: #333;
+}
+
+/* Icons and Text */
+.menu li svg {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 25px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.toggle-btn:focus {
+  outline: none;
+}
+
+.link{
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
