@@ -1,0 +1,17 @@
+.card {
+    width: 85%;
+    height: 100%;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    font-size: 20px;
+    list-style-type: none;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+}
