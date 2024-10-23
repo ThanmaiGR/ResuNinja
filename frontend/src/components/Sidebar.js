@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { FaBars, FaHome, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { Link } from 'react-router-dom';
-import "./Sidebar.css";
+import "../styles/Sidebar.css";
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -16,16 +16,13 @@ const Sidebar = () => {
       </button>
       <ul className="menu">
         <li>
-          <FaHome/>
-          {isOpen && <span><Link to="/home" className="link">Home</Link></span>}
+          {isOpen? <span><Link to="/" className="link"> <FaHome/>Home</Link></span> : <FaHome/>}
         </li>
         <li>
-          <FaUser/>
-          {isOpen && <span><Link to="/profile" className="link">Profile</Link></span>}
+          {isOpen? <span><Link to={`/profile/${props.user.username}`} className="link"> <FaUser/>Profile</Link></span> : <FaUser/>}
         </li>
         <li>
-          <FaCog/>
-          {isOpen && <span>Settings</span>}
+          {isOpen? <span><Link to="/settings" className="link"> <FaCog/>Settings</Link></span> : <FaCog/>}
         </li>
         <li>
           <FaSignOutAlt/>
@@ -33,6 +30,7 @@ const Sidebar = () => {
         </li>
       </ul>
     </div>
+
   );
 };
 

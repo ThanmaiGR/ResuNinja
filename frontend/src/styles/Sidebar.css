@@ -1,13 +1,14 @@
 /* Sidebar Container */
 .sidebar {
-  width: 60px;
+  width: 50px;
   height: 100vh;
   background-color: #111;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
-  transition: width 0.3s;
+  padding-top: 40px;
+  transition: width 0.8s;
+  position: fixed;
 }
 
 /* Open State */
@@ -30,10 +31,11 @@
   color: #fff;
   cursor: pointer;
   transition: background-color 0.2s;
+  font-size: 24px;
 }
 
 .menu li:hover {
-  background-color: #333;
+  background-color: darkcyan;
 }
 
 /* Icons and Text */
@@ -52,7 +54,7 @@
 }
 
 .toggle-btn:focus {
-  outline: none;
+  /*outline: none;*/
 }
 
 .link{

@@ -1,10 +1,10 @@
+import { useNavigate } from 'react-router-dom';
+import ProfileForm from "../components/ProfileForm";
+
 const ProfilePage = () => {
     return (
-        <>
-            <input type="text" placeholder="First Name"/><br/>
-            <input type="text" placeholder="Last Name"/><br/>
-            <input type="email" placeholder="Email"/><br/>
-        </>
-    );
-};
+    <ProfileForm />
+    )
+}
+
 export default ProfilePage;
