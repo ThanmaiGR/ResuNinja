@@ -3,12 +3,11 @@ import { FaBars, FaHome, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { Link } from 'react-router-dom';
 import "../styles/Sidebar.css";
-
-const Sidebar = (props) => {
+import { useUser } from "../context/UserContext";
+const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleSidebar = () => setIsOpen(!isOpen);
-
+  const {user} = useUser();
   return (
     < div className={`sidebar ${isOpen ? "open" : ""}`}>
       <button className="toggle-btn" onClick={toggleSidebar}>
@@ -19,13 +18,19 @@ const Sidebar = (props) => {
           {isOpen? <span><Link to="/" className="link"> <FaHome/>Home</Link></span> : <FaHome/>}
         </li>
           {
-              (props.user.username !== undefined) ?
-                  <li>
-                    {isOpen? <span><Link to={`/profile/${props.user.username}`} className="link"> <FaUser/>Profile</Link></span> : <FaUser/>}
-                  </li> :
+              (user.username !== undefined) ?
                   <>
                       <li>
-                          {isOpen? <span><Link to='/login' className="link"> <FaUser/>Login</Link></span> : <FaUser/>}
+                          {isOpen ? <span><Link to={`/profile/${user.username}`} className="link"> <FaUser/>Profile</Link></span> :
+                              <FaUser/>}
+                      </li>
+                      <li>
+                          {isOpen? <span><Link to="/logout" className="link"> <FaSignOutAlt/>Logout</Link></span> : <FaSignOutAlt/>}
+                     </li>
+                  </> :
+                  <>
+                      <li>
+                          {isOpen ? <span><Link to='/login' className="link"> <FaUser/>Login</Link></span> : <FaUser/>}
                       </li>
                       <li>
                           {isOpen? <span><Link to='/signup' className="link"> <FaUser/>Signup</Link></span> : <FaUser/>}
@@ -34,10 +39,6 @@ const Sidebar = (props) => {
           }
         <li>
           {isOpen? <span><Link to="/settings" className="link"> <FaCog/>Settings</Link></span> : <FaCog/>}
-        </li>
-        <li>
-          <FaSignOutAlt/>
-          {isOpen && <span>Logout</span>}
         </li>
       </ul>
     </div>
