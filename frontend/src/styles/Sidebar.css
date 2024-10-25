@@ -32,7 +32,7 @@
 }
 
 .menu li:hover {
-  background-color: #2E9CCA;
+  background-color: green;
 }
 
 .menu li svg {
@@ -41,6 +41,7 @@
 }
 
 .toggle-btn {
+  width: 20px;
   background: none;
   border: none;
   color: #AAABB8;
@@ -49,12 +50,17 @@
   margin-bottom: 20px;
 }
 
-.toggle-btn:focus {
-  /*outline: none;*/
+.toggle-button:hover {
+  background-color: green;
+  outline: none;
 }
 
 .link {
   color: #AAABB8;
   text-decoration: none;
   transition: color 0.3s;
+}
+
+.left-arrow, .right-arrow {
+  background-color: green;
 }

@@ -62,7 +62,7 @@ const ProfileForm = () => {
     <>
         <h2>User Details of {user.username}</h2>
         <form className='profile-form' onSubmit={saveChanges}>
-            <label>Name: </label>
+            <label className='label'>Name: </label>
             <input
                 type="text"
                 value={user.name}
@@ -70,7 +70,7 @@ const ProfileForm = () => {
                 onChange={handleChange}
                 name="name"
             /><br/>
-            <label>Username: </label>
+            <label className='label'>Username: </label>
             <input
                 type="text"
                 value={user.username}
@@ -79,7 +79,7 @@ const ProfileForm = () => {
                 onChange={handleChange}
                 name="username"
             /><br/>
-            <label>Email: </label>
+            <label className='label'>Email: </label>
             <input
                 type="email"
                 value={user.email}
@@ -88,7 +88,7 @@ const ProfileForm = () => {
                 onChange={handleChange}
                 name="email"
             /><br/>
-            <label>Contact: </label>
+            <label className='label'>Contact: </label>
             <input
                 type="text"
                 value={user.contact}
@@ -96,7 +96,7 @@ const ProfileForm = () => {
                 onChange={handleChange}
                 name="contact"
             /><br/>
-            <label>Country: </label>
+            <label className='label'>Country: </label>
             <input
                 type="text"
                 value={user.country}

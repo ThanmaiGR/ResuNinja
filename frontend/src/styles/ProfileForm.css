@@ -1,10 +1,18 @@
 .input-box {
+    margin-left: 1em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     padding: 5px;
     box-sizing: border-box;
-    border: 2px solid #29648A;
+    border: 1px solid #29648A;
     color: #25274D;
+}
+
+.label {
+    margin-left: 1em;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    /*color: #2E9CCA;*/
 }
 
 .input-box:disabled {
@@ -13,17 +21,19 @@
 }
 
 .profile-form {
-    height: 75%;
-    width: 80%;
+    height: 60%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
     padding: 20px;
     background-color: #F8F9FA;
     border: 1px solid #2E9CCA;
+
 }
 
 .feedback-button {
+    margin-left: 1em;
     margin-top: 1em;
     margin-bottom: 1em;
     color: white;
@@ -38,13 +48,15 @@
 }
 
 .state--value {
-    background-color: white;
-    height: 75px;
-    width: 75px;
+
+    margin-left: 1em;
+    color: white;
+    height: 70px;
+    width: 70px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #2E9CCA;
+    background-color: #2E9CCA;
     cursor: pointer;
 }

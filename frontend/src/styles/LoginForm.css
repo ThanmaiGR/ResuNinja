@@ -8,6 +8,8 @@ h1 {
 }
 
 .form-container {
+  height: auto;
+  width: 100%;
   background-color: #AAABB8; 
   padding: 20px;
   border-radius: 10px;

@@ -15,7 +15,7 @@ function App() {
           <UserProvider>
               <div style={{display: 'flex'}}>
                 <Sidebar />
-                <div style={{marginLeft: '200px', width: '100%'}}  > {/* Adjust margin based on Sidebar width */}
+                <div className='main-content' > {/* Adjust margin based on Sidebar width */}
                     <AppRoutes />
                 </div>
               </div>
