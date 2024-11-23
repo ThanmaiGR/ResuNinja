@@ -1,0 +1,61 @@
+.app-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+h1 {
+  color: #2E9CCA;
+}
+
+.form-container {
+  background-color: #AAABB8;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form-container h2 {
+  color: #2E9CCA;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid #2E9CCA;
+  border-radius: 5px;
+  color: #25274D;
+}
+
+button {
+  background-color: #2E9CCA;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #464866;
+}
+
+.form-switch {
+  margin-bottom: 20px;
+}
+
+.form-switch button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: 2px solid #2E9CCA;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: white;
+  color: #2E9CCA;
+}
+
+.form-switch button:hover {
+  background-color: #2E9CCA;
+  color: white;
+}
