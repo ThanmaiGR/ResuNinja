@@ -1,46 +1,54 @@
 .app-container {
   text-align: center;
-  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 60px); 
+  background-color: black;
 }
 
 h1 {
-  color: #29648A; 
+  color: #FB6542;
 }
 
 .form-container {
-  height: auto;
-  width: 100%;
-  background-color: #AAABB8; 
+  background-color: black; 
   padding: 20px;
   border-radius: 10px;
   max-width: 400px;
-  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #FFBB00; 
+  color: #FB6542;
 }
 
 .form-container h2 {
-  color: #29648A; 
+  color: #FB6542; 
 }
 
 input {
   width: 80%;
   padding: 10px;
   margin: 10px 0;
-  border: 2px solid #2E9CCA; 
+  border: 2px solid #FFBB00; 
   border-radius: 5px;
-  color: #25274D; 
+  color: #25274D;
+  background-color: white;
 }
 
 button {
-  background-color: #2E9CCA; 
+  background-color: #FB6542; 
   color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 80%;
+  margin-top: 10px;
 }
 
 button:hover {
-  background-color: #464866;
+  background-color: black; 
 }
 
 .form-switch {
@@ -50,14 +58,14 @@ button:hover {
 .form-switch button {
   margin: 0 10px;
   padding: 10px 20px;
-  border: 2px solid #2E9CCA;
+  border: 2px solid #FFBB00; 
   border-radius: 5px;
   cursor: pointer;
   background-color: white;
-  color: #2E9CCA; 
+  color: #FFBB00;
 }
 
 .form-switch button:hover {
-  background-color: #2E9CCA; 
-  color: white;
+  background-color: #FFBB00; 
+  color: white; 
 }
