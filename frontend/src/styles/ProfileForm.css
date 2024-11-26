@@ -1,18 +1,10 @@
 .input-box {
-    margin-left: 1em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     padding: 5px;
     box-sizing: border-box;
-    border: 1px solid #29648A;
+    border: 2px solid #FFBB00;
     color: #25274D;
-}
-
-.label {
-    margin-left: 1em;
-    margin-top: 1em;
-    margin-bottom: 0.5em;
-    /*color: #2E9CCA;*/
 }
 
 .input-box:disabled {
@@ -21,23 +13,21 @@
 }
 
 .profile-form {
-    height: 60%;
-    width: 50%;
+    height: 75%;
+    width: 80%;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
     padding: 20px;
-    background-color: #F8F9FA;
-    border: 1px solid #2E9CCA;
-
+    background-color: black;
+    border: 1px solid #FFBB00;
 }
 
 .feedback-button {
-    margin-left: 1em;
     margin-top: 1em;
     margin-bottom: 1em;
     color: white;
-    background-color: #2E9CCA;
+    background-color: #FB6542;
     width: 25%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
 }
@@ -48,15 +38,13 @@
 }
 
 .state--value {
-
-    margin-left: 1em;
-    color: white;
-    height: 70px;
-    width: 70px;
+    background-color: white;
+    height: 75px;
+    width: 75px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #2E9CCA;
+    color: #FB6542;
     cursor: pointer;
 }
