@@ -12,11 +12,13 @@ export function UserProvider({ children }) {
 
     // Sync user state with localStorage on mount
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser({ username: storedUser });
+        if (user?.username) {
+            localStorage.setItem('username', user.username);
+        } else {
+            localStorage.removeItem('username');
         }
-    }, []);
+    }, [user]);
+
 
     return (
         <UserContext.Provider value={{ user, setUser }}>

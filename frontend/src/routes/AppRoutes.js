@@ -6,6 +6,11 @@ import SettingsPage from '../pages/SettingsPage';
 import FeedbackPage from '../pages/FeedbackPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
+import LogoutPage from "../pages/LogoutPage";
+
+
+
+import Testcount from "../pages/Testcount";
 const AppRoutes = () => (
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -14,7 +19,10 @@ const AppRoutes = () => (
       <Route path="/profile/:username/:feedback" element={<FeedbackPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/logout" element={<LogoutPage />} />
 
+
+      <Route path="/test" element={<Testcount />} />
     </Routes>
 );
 

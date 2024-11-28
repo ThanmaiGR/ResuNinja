@@ -1,6 +1,6 @@
 @import url('color-schemes.css');
 
-.login-form{
+.register-form{
     background-color: var(--first-color);
     color: var(--fourth-color);
     display: flex;
@@ -8,10 +8,10 @@
     justify-content: center;
     align-items: center;
     /*margin-top: 50px;*/
-    box-shadow: 0 24px 24px var(--third-color);
+    box-shadow: 0 24px 24px var(--second-color);
 }
 
-.login-form-input {
+.register-form-input {
     width: 300px;
     height: 30px;
     margin: 20px;
@@ -19,13 +19,13 @@
     border-radius: 5px;
     border: 1px solid var(--fourth-color);
 }
-.login-form-legend {
+.register-form-legend {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
-.login-form-button{
+.register-form-button{
     width: 100px;
     height: 30px;
     margin: 20px;
@@ -37,12 +37,12 @@
     font-weight: bold;
     cursor: pointer;
 }
-.login-form-button:hover{
+.register-form-button:hover{
     background-color: var(--second-color);
     color: var(--third-color);
 }
 
-.login-form-fieldset{
+.register-form-fieldset{
     border: 1px solid var(--fourth-color);
     border-radius: 5px;
     padding: 20px;
@@ -52,18 +52,18 @@
     justify-content: center;
 }
 
-.login-form-label{
+.register-form-label{
     font-size: 15px;
     font-weight: bold;
     margin: 10px;
 }
 
-.login-form-p{
+.register-form-p{
     font-size: 15px;
     margin: 10px;
 }
 
-.login-form-link {
+.register-form-link {
     font-size: 15px;
     /*margin: 10px;*/
     color: var(--third-color);
