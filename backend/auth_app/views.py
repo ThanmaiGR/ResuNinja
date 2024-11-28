@@ -1,69 +1,88 @@
-from .serializers import RegisterSerializer, LoginSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import render
+
+# Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
-from rest_framework import generics
-from auth_app.serializers import UserSerializer
+from auth_app import serializers
 from django.contrib.auth.models import User
-
-
-class LogoutView(APIView):
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({"message": "Logged out successfully"}, status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+from rest_framework import generics
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 
 class RegisterView(APIView):
+    """API endpoint for user registration."""
     def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            data = {
-                "username": serializer.data["username"],
-                "message": "User registered successfully"
-            }
-            return Response(data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        data = {
+            'username': serializer.data.get('username'),
+            'refresh_token': str(refresh),
+            'access_token': str(refresh.access_token),
+        }
+        return Response(data, status=201)
 
 
 class LoginView(APIView):
+    """API endpoint for user login."""
     def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data
-            tokens = serializer.get_tokens(user)
-            data = {
-                "tokens": tokens,
-                "username": user.username,
-            }
-            return Response(data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class UserDetailsView(APIView):
-    def get(self, request):
-        user = request.user
+        serializer = serializers.LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        refresh = RefreshToken.for_user(user)
+        username = serializer.validated_data['username']
         data = {
-            "username": user.username,
-            "email": user.email,
-
+            'username': username,
+            'refresh_token': str(refresh),
+            'access_token': str(refresh.access_token),
         }
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(data, status=200)
+
+
+class LogoutView(APIView):
+    """API endpoint for user logout."""
+
+    def post(self, request):
+        try:
+            # Get the refresh token from the request data
+            refresh_token = request.data.get('refresh')
+            if not refresh_token:
+                return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Blacklist the refresh token
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": "Invalid token or already logged out"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserListView(generics.ListCreateAPIView):
+    """API endpoint for listing and creating users."""
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class RefreshTokenView(APIView):
+    """API endpoint for refreshing access tokens."""
 
+    def post(self, request):
+        refresh_token = request.data.get('refresh')
 
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+        if not refresh_token:
+            return Response({"error": "Refresh token is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Generate a new access token
+            token = RefreshToken(refresh_token)
+            data = {
+                "access": str(token.access_token)
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except TokenError:
+            return Response({"error": "Invalid or expired refresh token."}, status=status.HTTP_401_UNAUTHORIZED)

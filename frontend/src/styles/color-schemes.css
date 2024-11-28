@@ -1,0 +1,21 @@
+:root {
+  	--first-color: #323643;
+	--second-color: #606470;
+	--third-color: #93deff;
+	--fourth-color: #f7f7f7;
+}
+
+
+
+
+.first-color {
+  background: var(--first-color);}
+
+.second-color {
+  background: var(--second-color);}
+
+.third-color {
+  background: var(--third-color);}
+
+.fourth-color {
+  background: var(--fourth-color);}
