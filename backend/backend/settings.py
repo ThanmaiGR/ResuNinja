@@ -152,3 +152,4 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+CORS_ALLOW_CREDENTIALS = True  # Allow cookies in cross-origin requests

@@ -8,7 +8,7 @@ export const useUser = () => useContext(UserContext);
 
 // UserProvider to wrap the app and provide user state
 export function UserProvider({ children }) {
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({username: localStorage.getItem('username')} || {});
 
     // Sync user state with localStorage on mount
     useEffect(() => {

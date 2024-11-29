@@ -16,6 +16,7 @@ const useRequest = () => {
             const response = await axios.request({
                 method: method,
                 url: url,
+                withCredentials: true,
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/json',
@@ -37,6 +38,7 @@ const useRequest = () => {
                     navigate('/login');
                 }
             } else {
+                // console.log()
                 navigate('/login');
             }
         }
