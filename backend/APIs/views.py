@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+
 class CounterView(APIView):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
@@ -11,6 +12,8 @@ class CounterView(APIView):
         """
         Retrieve the current counter value from the session.
         """
+        print(f"Session Key: {request.session.session_key}")
+        print(f"Session Data: {request.session.items()}")
         counter = request.session.get('counter', 0)
         return Response({"counter": counter})
 
