@@ -16,7 +16,11 @@ class UserProfileView(APIView):
 
 
 class CounterView(APIView):
+<<<<<<< HEAD
+    # authentication_classes = [JWTAuthentication]
+=======
     authentication_classes = [JWTAuthentication]
+>>>>>>> main
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

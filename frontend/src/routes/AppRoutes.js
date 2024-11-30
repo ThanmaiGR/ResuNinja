@@ -7,7 +7,7 @@ import FeedbackPage from '../pages/FeedbackPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import LogoutPage from "../pages/LogoutPage";
-
+import ResumePage from "../pages/ResumePage";
 
 
 import Testcount from "../pages/Testcount";
@@ -20,7 +20,7 @@ const AppRoutes = () => (
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/logout" element={<LogoutPage />} />
-
+      <Route path="/resume" element={<ResumePage />} />
 
       <Route path="/test" element={<Testcount />} />
     </Routes>
