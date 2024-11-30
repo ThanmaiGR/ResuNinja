@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import ProfileSerializer
 
+
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -16,11 +17,8 @@ class UserProfileView(APIView):
 
 
 class CounterView(APIView):
-<<<<<<< HEAD
     # authentication_classes = [JWTAuthentication]
-=======
     authentication_classes = [JWTAuthentication]
->>>>>>> main
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

@@ -3,7 +3,7 @@ import '../styles/ProfileForm.css'
 import axios from 'axios';
 import React from 'react';
 import { useAlert } from '../context/AlertContext';
-const ProfileForm = () => {
+const ProfileForm = (props) => {
     const [user, setUser] =  React.useState( {
         username: 'johndoe123',
         name: 'John Doe',
@@ -65,7 +65,7 @@ const ProfileForm = () => {
             <label>Name: </label>
             <input
                 type="text"
-                value={user.name}
+                value={props.profile.name || user.name}
                 className='input-box'
                 onChange={handleChange}
                 name="name"
@@ -73,7 +73,7 @@ const ProfileForm = () => {
             <label>Username: </label>
             <input
                 type="text"
-                value={user.username}
+                value={props.profile.username || user.username}
                 disabled
                 className='input-box'
                 onChange={handleChange}
@@ -82,7 +82,7 @@ const ProfileForm = () => {
             <label>Email: </label>
             <input
                 type="email"
-                value={user.email}
+                value={props.profile.email || user.email}
                 disabled
                 className='input-box'
                 onChange={handleChange}
@@ -91,7 +91,7 @@ const ProfileForm = () => {
             <label>Contact: </label>
             <input
                 type="text"
-                value={user.contact}
+                value={props.profile.contact || user.contact}
                 className='input-box'
                 onChange={handleChange}
                 name="contact"
@@ -99,7 +99,7 @@ const ProfileForm = () => {
             <label>Country: </label>
             <input
                 type="text"
-                value={user.country}
+                value={props.profile.country || user.country}
                 className='input-box'
                 onChange={handleChange}
                 name="country"

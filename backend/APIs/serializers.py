@@ -2,18 +2,18 @@ from rest_framework import serializers
 from .models import Resume, UserSkill, ResumeSkill, Questionnaire, Feedback
 from django.contrib.auth.models import User
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email']
 
 
-
-
 class ResumeSkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResumeSkill
         fields = ['id', 'name']
+
 
 class ResumeSerializer(serializers.ModelSerializer):
     skills = ResumeSkillSerializer(many=True, read_only=True)# Show skill names
@@ -22,6 +22,7 @@ class ResumeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resume
         fields = ['id', 'user', 'skills', 'certifications', 'projects', 'upload_date']
+
 
 class UserSkillSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()  
