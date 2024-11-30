@@ -6,3 +6,5 @@ djangorestframework-simplejwt[blacklist]
 python-dotenv
 django-filter
 markdown
+pymupdf
+google-generativeai>=0.8.3
