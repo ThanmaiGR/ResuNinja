@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaHome, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaUser, FaCog, FaSignOutAlt, FaFileUpload} from "react-icons/fa";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { Link } from 'react-router-dom';
 import "../styles/Sidebar.css";
@@ -55,6 +55,8 @@ const Sidebar = () => {
                         </li>
                     </>
             }
+            <li>{isOpen ? <span><Link to='/resume' className="link"> <FaFileUpload/> Upload Resume</Link></span> :
+                                <FaFileUpload/>}</li>
         </ul>
     </div>
   );

@@ -6,7 +6,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class CounterView(APIView):
     # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """
