@@ -1,11 +1,13 @@
+@import url('color-schemes.css');
+
 .sidebar {
-  width: 200px;  
+  width: 200px;
   height: 100vh;
-  background-color: black;
+  background-color: var(--col6);  
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px; 
+  padding-top: 20px;
   position: fixed;
 }
 
@@ -18,8 +20,8 @@
 
 .logo {
   max-width: 80%;
-  max-height: 100px; 
-  object-fit: contain; 
+  max-height: 100px;
+  object-fit: contain;
 }
 
 .menu {
@@ -33,14 +35,16 @@
   display: flex;
   align-items: center;
   padding: 10px;
-  color: #FB6542;
+  color: var(--col5);  
   cursor: pointer;
   transition: background-color 0.2s;
   font-size: 24px;
 }
-
+.toggle-btn{
+  color: aqua;
+}
 .menu li:hover {
-  background-color: #FB6542;
+  background-color: var(--col5); 
 }
 
 .menu li svg {
@@ -49,11 +53,32 @@
 }
 
 .toggle-btn {
-  display: none; 
+  display: none;
 }
 
 .link {
-  color: #FB6542;
+  color: var(--col5); 
   text-decoration: none;
   transition: color 0.3s;
+}
+
+.link:hover {
+  color: var(--col3);  
+}
+
+.toggle-color-btn {
+  margin: 10px 0;
+  padding: 8px 12px;
+  background-color: var(--col4);
+  color: var(--col2);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle-color-btn:hover {
+  background-color: var(--col5);
+  color: var(--col2);
 }

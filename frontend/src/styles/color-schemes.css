@@ -1,21 +1,38 @@
-:root {
-  	--first-color: #323643;
-	--second-color: #606470;
-	--third-color: #93deff;
-	--fourth-color: #f7f7f7;
+:root[data-flag="1"] {
+  --col1: #0B0C10;
+  --col2: #1F2833;
+  --col3: #C5C6C7;
+  --col4: #66FCF1;
+  --col5: #45A29E;
+  --col6: #121316;
+}
+
+:root[data-flag="0"] {
+  --col1: #ffffff;
+  --col2: #1F2833;
+  --col3: #4d4c4c;
+  --col4: #66FCF1;
+  --col5: #45A29E;
+  --col6: #2d2d2d;
 }
 
 
+.col1 {
+  background: var(--col1);
+}
 
+.col2 {
+  background: var(--col2);
+}
 
-.first-color {
-  background: var(--first-color);}
+.col3 {
+  background: var(--col3);
+}
 
-.second-color {
-  background: var(--second-color);}
+.col4 {
+  background: var(--col4);
+}
 
-.third-color {
-  background: var(--third-color);}
-
-.fourth-color {
-  background: var(--fourth-color);}
+.col5 {
+  background: var(--col5);
+}

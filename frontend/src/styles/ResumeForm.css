@@ -1,34 +1,33 @@
 @import url('color-schemes.css');
 
-.login-form {
+.resume-form {
     background-color: var(--col1);
     color: var(--col3);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /*margin-top: 50px;*/
+    padding: 40px;
+    margin: 50px auto;
+    width: 400px;
+    border-radius: 10px;
     box-shadow: 0 24px 24px var(--col2);
 }
 
-.login-form-input {
+.resume-form-input {
     width: 300px;
     height: 30px;
     margin: 20px;
     padding: 5px;
     border-radius: 5px;
     border: 1px solid var(--col4);
+    color: var(--col2);
+    background-color: var(--col3);
 }
 
-.login-form-legend {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.login-form-button {
-    width: 100px;
-    height: 30px;
+.resume-form-button {
+    width: 150px;
+    height: 40px;
     margin: 20px;
     padding: 5px;
     border-radius: 15px;
@@ -37,38 +36,29 @@
     color: var(--col1);
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.login-form-button:hover {
+.resume-form-button:hover {
     background-color: var(--col2);
-    color: var(--col3);
+    color: var(--col1);
 }
 
-.login-form-fieldset {
-    border: 1px solid var(--col4);
-    border-radius: 5px;
-    padding: 20px;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.resume-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--col4);
 }
 
-.login-form-label {
+.resume-form-label {
     font-size: 15px;
     font-weight: bold;
     margin: 10px;
 }
 
-.login-form-p {
-    font-size: 15px;
+.resume-form-message {
+    font-size: 14px;
+    color: var(--col1);
     margin: 10px;
-}
-
-.login-form-link {
-    font-size: 15px;
-    /*margin: 10px;*/
-    color: var(--col4);
-    cursor: pointer;
-    text-decoration-color: var(--col4);
+    text-align: center;
 }

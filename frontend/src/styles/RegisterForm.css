@@ -1,14 +1,14 @@
 @import url('color-schemes.css');
 
-.register-form{
-    background-color: var(--first-color);
-    color: var(--fourth-color);
+.register-form {
+    background-color: var(--col1); 
+    color: var(--col3);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     /*margin-top: 50px;*/
-    box-shadow: 0 24px 24px var(--second-color);
+    box-shadow: 0 24px 24px var(--col2);  
 }
 
 .register-form-input {
@@ -17,33 +17,35 @@
     margin: 20px;
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid var(--fourth-color);
+    border: 1px solid var(--col4);
 }
+
 .register-form-legend {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
-.register-form-button{
+.register-form-button {
     width: 100px;
     height: 30px;
     margin: 20px;
     padding: 5px;
     border-radius: 15px;
-    border: 1px solid var(--fourth-color);
-    background-color: var(--third-color);
-    color: var(--first-color);
+    border: 1px solid var(--col4); 
+    background-color: var(--col4); 
+    color: var(--col1); 
     font-weight: bold;
     cursor: pointer;
 }
-.register-form-button:hover{
-    background-color: var(--second-color);
-    color: var(--third-color);
+
+.register-form-button:hover {
+    background-color: var(--col2);  
+    color: var(--col3); 
 }
 
-.register-form-fieldset{
-    border: 1px solid var(--fourth-color);
+.register-form-fieldset {
+    border: 1px solid var(--col4);
     border-radius: 5px;
     padding: 20px;
     margin: 20px;
@@ -52,13 +54,13 @@
     justify-content: center;
 }
 
-.register-form-label{
+.register-form-label {
     font-size: 15px;
     font-weight: bold;
     margin: 10px;
 }
 
-.register-form-p{
+.register-form-p {
     font-size: 15px;
     margin: 10px;
 }
@@ -66,7 +68,7 @@
 .register-form-link {
     font-size: 15px;
     /*margin: 10px;*/
-    color: var(--third-color);
+    color: var(--col4); 
     cursor: pointer;
-    text-decoration-color: var(--fourth-color);
+    text-decoration-color: var(--col4);  
 }

@@ -6,16 +6,16 @@ const HomePage = () => {
         <div className="hero">
             <div className="slides">
                 <div className="slide">
-                    <img src="A.jpg" alt="Slide 1" />
+                    <img src="1.png" alt="Slide 1" />
                 </div>
                 <div className="slide">
-                    <img src="B.jpg" alt="Slide 2" />
+                    <img src="2.png" alt="Slide 2" />
                 </div>
                 <div className="slide">
-                    <img src="C.jpg" alt="Slide 3" />
+                    <img src="3.png" alt="Slide 3" />
                 </div>
                 <div className="slide">
-                    <img src="D.jpg" alt="Slide 4" />
+                    <img src="4.png" alt="Slide 4" />
                 </div>
             </div>
         </div>
