@@ -80,7 +80,7 @@ class LLM:
         Question:
         Rating:
         '''
-        return self.flash.generate_content(prompt)
+        return self.flash.generate_content(prompt).text
 
     def generate_feedback(self, questions, answers):
         """
@@ -98,3 +98,4 @@ class LLM:
         Descriptive FeedBack:
         """)
 
+        return feed.text
