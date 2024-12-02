@@ -62,3 +62,20 @@
     margin: 10px;
     text-align: center;
 }
+
+.resume-form-li{
+     margin: 5px;
+     padding: 5px 10px;
+     background: var(--col2);
+    color: var(--col4);
+     border-radius: 5px;
+     display: flex;
+     align-items: center;
+}
+
+.resume-form-ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}

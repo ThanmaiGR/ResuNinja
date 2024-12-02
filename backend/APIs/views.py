@@ -65,7 +65,7 @@ class UploadResumeView(APIView):
                 skill, _ = ResumeSkill.objects.get_or_create(name=skill_name)
                 UserSkill.objects.get_or_create(user=request.user, skill=skill)
 
-            return Response({"message": "Resume uploaded and processed successfully"}, status=status.HTTP_201_CREATED)
+            return Response({"message": "Resume uploaded and processed successfully", "skills": skills}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({"error": f"Failed to process resume: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
