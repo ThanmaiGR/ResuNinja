@@ -62,6 +62,7 @@
   transition: color 0.3s;
 }
 
+<<<<<<< HEAD
 .link:hover {
   color: var(--col3);  
 }
@@ -82,3 +83,5 @@
   background-color: var(--col5);
   color: var(--col2);
 }
+=======
+>>>>>>> main

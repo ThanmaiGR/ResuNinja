@@ -16,7 +16,7 @@ def jsonify(text):
     try:
         # Convert JSON string to a Python dictionary
         response_dict = json.loads(response_text)
-        print(response_dict)
+        return response_dict
     except json.JSONDecodeError as e:
         print("Error decoding JSON:", e)
 
@@ -67,7 +67,7 @@ class LLM:
         Extract only Certifications, Work Experience, Skills and Projects.
         {text}
         """
-        return self.flash.generate_content(prompt)
+        return self.flash.generate_content(prompt).text
 
     def generate_questionnaire(self, skill):
         """
@@ -80,7 +80,7 @@ class LLM:
         Question:
         Rating:
         '''
-        return self.flash.generate_content(prompt)
+        return self.flash.generate_content(prompt).text
 
     def generate_feedback(self, questions, answers):
         """
@@ -98,3 +98,4 @@ class LLM:
         Descriptive FeedBack:
         """)
 
+        return feed.text
