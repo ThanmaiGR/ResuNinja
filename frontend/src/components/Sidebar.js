@@ -23,7 +23,6 @@ const Sidebar = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       <button className="toggle-btn" onClick={toggleSidebar}>
         {isOpen ? <SlArrowLeft /> : <SlArrowRight />}
@@ -112,63 +111,11 @@ const Sidebar = () => {
           )}
         </li>
       </ul>
-
       {/* New Color Scheme Toggle Button */}
       <button className="toggle-color-btn" onClick={toggleColorScheme}>
         {colorSchemeFlag === 1 ? "Light Mode" : "Dark Mode"}
       </button>
     </div>
-=======
-      <div className={`sidebar ${isOpen ? "open" : ""}`}>
-          <div className="logo-container">
-              <img src="logo.jpg" alt="Logo" className="logo"/>
-          </div>
-          <button className="toggle-btn" onClick={toggleSidebar}>
-              {isOpen ? <SlArrowLeft/> : <SlArrowRight/>}
-          </button>
-
-          {/* Logo Image */}
-
-
-          <ul className="menu">
-              <li>
-                  {isOpen ? <span><Link to="/" className="link"> <FaHome/> Home</Link></span> : <FaHome/>}
-              </li>
-              {
-                  (user.username) ?
-                      <>
-                          <li>
-                              {isOpen ? <span><Link to={`/profile/${user.username}`}
-                                                    className="link"> <FaUser/> Profile</Link></span> :
-                                  <FaUser/>}
-                          </li>
-                          <li>
-                              {isOpen ? <span><Link to="/settings" className="link"> <FaCog/> Settings</Link></span> :
-                                  <FaCog/>}
-                          </li>
-                          <li>
-                              {isOpen ?
-                                  <span><Link to="/logout" className="link"> <FaSignOutAlt/> LogOut</Link></span> :
-                                  <FaSignOutAlt/>}
-                          </li>
-                      </> :
-                      <>
-                          <li>
-                              {isOpen ? <span><Link to='/login' className="link"> <FaUser/> Login</Link></span> :
-                                  <FaUser/>}
-                          </li>
-                          <li>
-                              {isOpen ? <span><Link to='/signup' className="link"> <FaUser/> Signup</Link></span> :
-                                  <FaUser/>}
-                          </li>
-                      </>
-              }
-              <li>{isOpen ? <span><Link to='/resume' className="link"> <FaFileUpload/> Upload Resume</Link></span> :
-                  <FaFileUpload/>}</li>
-          </ul>
-      </div>
->>>>>>> main
   );
 };
-
 export default Sidebar;
