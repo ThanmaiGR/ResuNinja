@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import ProfileSerializer, ResumeSerializer
-from .functions import LLM
+from .functions import LLM, jsonify
 from .models import Resume, ResumeSkill, UserSkill
 from rest_framework import status
 import os
@@ -19,6 +19,7 @@ class UserProfileView(APIView):
         """
         serializer = ProfileSerializer(request.user)
         return Response(serializer.data)
+
 
 class UploadResumeView(APIView):
     permission_classes = [IsAuthenticated]
@@ -53,12 +54,11 @@ class UploadResumeView(APIView):
             parsed_data = llm.parse_resume(resume_text)
             if 'error' in parsed_data:
                 return Response({"error": "Parsing failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+            parsed_data = jsonify(parsed_data)
             # Update database with parsed data
             user_resume.certifications = parsed_data.get("Certifications", "")
             user_resume.projects = parsed_data.get("Projects", "")
             user_resume.save()
-
             # Add extracted skills
             skills = parsed_data.get("Skills", [])
             for skill_name in skills:
@@ -74,6 +74,8 @@ class UploadResumeView(APIView):
             # Delete the temporary file
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
+
+
 class UserSkillsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -84,6 +86,7 @@ class UserSkillsView(APIView):
         user_skills = UserSkill.objects.filter(user=request.user).select_related('skill')
         skills_data = [user_skill.skill.name for user_skill in user_skills]
         return Response({"skills": skills_data}, status=status.HTTP_200_OK)
+
 
 class CounterView(APIView):
     # authentication_classes = [JWTAuthentication]
