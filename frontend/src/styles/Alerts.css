@@ -1,3 +1,4 @@
+@import url('color-schemes.css');
 
 .alert-container {
     position: fixed;
@@ -18,22 +19,22 @@
 }
 
 .alert-toast.success {
-    background-color: #FFBB00; 
+    background-color: var(--col4); 
     color: white;
 }
 
 .alert-toast.error {
-    background-color: #25274D; 
+    background-color: var(--col1);  
     color: white;
 }
 
 .alert-toast.warning {
-    background-color: #FB6542;
+    background-color: var(--col5);  
     color: white;
 }
 
 .alert-toast.info {
-    background-color: #29648A; 
+    background-color: var(--col2); 
     color: white;
 }
 

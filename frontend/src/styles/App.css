@@ -1,3 +1,5 @@
+@import url('color-schemes.css');
+
 .App {
   text-align: center;
 }
@@ -14,18 +16,18 @@
 }
 
 .App-header {
-  background-color: black;
+  background-color: var(--col1); 
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: red;
+  color: var(--col3);  
 }
 
 .App-link {
-  color: #FFBB00;
+  color: var(--col4); 
 }
 
 @keyframes App-logo-spin {
@@ -37,15 +39,15 @@
   }
 }
 
-html, body{
-    height: 100%;
+html, body {
+  height: 100%;
 }
 
-.main-content{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }

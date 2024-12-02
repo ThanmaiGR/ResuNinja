@@ -1,3 +1,5 @@
+@import url('color-schemes.css');
+
 .hero {
     position: relative;
     width: 100%;
@@ -5,7 +7,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #000000;
+    background-color: var(--col1);  
     overflow: hidden; 
 }
 
@@ -25,9 +27,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid #ccc; 
+    border: 2px solid var(--col2);  
     border-radius: 10px; 
-    background-color: #fff;
+    background-color: var(--col2);  
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
