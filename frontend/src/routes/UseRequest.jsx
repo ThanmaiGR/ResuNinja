@@ -5,12 +5,16 @@ const useRequest = () => {
     const navigate = useNavigate();
 
     const sendRequest = async (method, url, data = {}, headers = null) => {
+        // console.log("method", method)
+        // console.log("url", url)
+        console.log("data", data)
+
         const access_token = localStorage.getItem('access_token');
         const refresh_token = localStorage.getItem('refresh_token');
-        // if (!(access_token && refresh_token)) {
-        //     navigate('/login');
-        //     return null;
-        // }
+        if (!(access_token && refresh_token)) {
+            navigate('/login');
+            return null;
+        }
 
         try {
             const response = await axios.request({
@@ -19,11 +23,12 @@ const useRequest = () => {
                 withCredentials: true,
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'application/json',
+                    // 'Content-Type': 'application/json',
                     ...headers,
                 },
                 data: data,
             });
+            console.log(response)
             return response.data;
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -39,7 +44,7 @@ const useRequest = () => {
                 }
             } else {
                 // console.log()
-                navigate('/login');
+                return Promise.reject(error);
             }
         }
     };

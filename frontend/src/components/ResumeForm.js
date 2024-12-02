@@ -1,46 +1,87 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/ResumeForm.css';
-import { useNavigate } from 'react-router-dom';
-
+import useRequest from '../routes/UseRequest';
 const ResumeForm = () => {
-    const navigate = useNavigate();
-    const [resume, setResume] = useState(null);
+    const sendRequest = useRequest();
+    const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
-
-    const handleResumeChange = (e) => {
-        setResume(e.target.files[0]);
+    const [skills, setSkills] = useState(null);
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]); // Get the first file selected by the user
     };
 
-    const handleResumeUpload = async (e) => {
+    const handleSkillsChange = (e) => {
+        setSkills([...skills, e.target.value]); // Get the skills input value
+    };
+    const handleFileUpload = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('resume', resume);
-        
-        try {
-            const response = await axios.post('http://localhost:8000/api/resume/', formData);
-            console.log(response.data);
-            navigate('/');  // Redirect after successful upload
-        } catch (error) {
-            setError('Failed to upload the resume.');
+        if (!file) {
+            setError("No file selected.");
+            return;
         }
-    };
+        const formData = new FormData();
+        formData.append("resume_file", file);
+        try {
+            const response = await sendRequest('POST', 'http://localhost:8000/api/upload-resume/', formData, )
+            setSkills(response.skills);
+            setError(null);
+        } catch (err) {
+            console.error("Resume upload error:", err);
+            setError("Failed to upload resume. Please try again.");
+        }
 
-    return (
-        <form onSubmit={handleResumeUpload} className="resume-form">
-            <fieldset className="resume-form-fieldset">
-                <legend className="resume-form-legend">Upload Resume</legend>
-                {error && <p>{error}</p>}
-                <label className="resume-form-label"></label>
-                <input 
-                    className="resume-form-input"
-                    type="file"
-                    onChange={handleResumeChange} 
-                />
-                <button type="submit" className="resume-form-button">Upload</button>
-            </fieldset>
-        </form>
-    );
+    }
+
+        const handleSkills = async (e) => {
+            try {
+                const response = await sendRequest('PUT', 'http://localhost:8000/api/user-skills/', skills);
+
+            }catch (err) {
+                console.error("Skills update error:", err);
+                // setError("Failed to update skills. Please try again.");
+            }
+        }
+
+
+        return (
+            <>
+                <form onSubmit={handleFileUpload} className="resume-form">
+                    <fieldset className="resume-form-fieldset">
+                        <legend className="resume-form-legend">Upload Resume</legend>
+                        {error && <p>{error}</p>}
+                        <label className="resume-form-label"></label>
+                        <input
+
+                            className="resume-form-input"
+                            type="file"
+                            onChange={handleFileChange}
+                        />
+                        <button type="submit" className="resume-form-button">Upload</button>
+                    </fieldset>
+                </form>
+
+                <form onSubmit={handleSkills} className="resume-form">
+                    <fieldset className="resume-form-fieldset">
+                        <legend className="resume-form-legend">Your Skills</legend>
+                        <label className="resume-form-label">Skills</label>
+                        <input
+                            className="resume-form-input"
+                            type="text"
+                            onChange={handleSkillsChange}
+                            placeholder="Add skill (comma-separated)"
+                        />
+                        <ul className="resume-form-ul">
+                            {skills && skills.map((skill, index) => (
+                                <li key={index} className="resume-form-li">{skill}</li>
+                            ))}
+                        </ul>
+                        <button type="submit" className="resume-form-button">Add Skills</button>
+                    </fieldset>
+                </form>
+
+            </>
+        );
 }
 
 export default ResumeForm;
