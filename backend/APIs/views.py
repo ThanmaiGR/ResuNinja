@@ -88,6 +88,25 @@ class UserSkillsView(APIView):
         return Response({"skills": skills_data}, status=status.HTTP_200_OK)
 
 
+class AddUserSkill(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def put(self, request):
+        """
+        Add a skill to the authenticated user's profile.
+        """
+        skill_name = request.data.get('skill')
+        if not skill_name:
+            return Response({"error": "No skill provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        skill, _ = ResumeSkill.objects.get_or_create(name=skill_name)
+        user_skill, created = UserSkill.objects.get_or_create(user=request.user, skill=skill)
+        if created:
+            return Response({"message": "Skill added successfully"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"message": "Skill already exists"}, status=status.HTTP_200_OK)
+
+
 class CounterView(APIView):
     # authentication_classes = [JWTAuthentication]
     authentication_classes = [JWTAuthentication]
