@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/ResumeForm.css';
 import useRequest from '../routes/UseRequest';
@@ -6,13 +6,16 @@ const ResumeForm = () => {
     const sendRequest = useRequest();
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
-    const [skills, setSkills] = useState(null);
+    const [skills, setSkills] = useState([]);
+    const [input, setInput] = useState('');
     const handleFileChange = (e) => {
         setFile(e.target.files[0]); // Get the first file selected by the user
     };
 
     const handleSkillsChange = (e) => {
-        setSkills([...skills, e.target.value]); // Get the skills input value
+        e.preventDefault();
+        if(e.key === 'Enter')
+            setSkills([...skills, e.target.value]); // Get the skills input value
     };
     const handleFileUpload = async (e) => {
         e.preventDefault();
@@ -33,17 +36,32 @@ const ResumeForm = () => {
 
     }
 
-        const handleSkills = async (e) => {
+    useEffect( () => {
+        const fetchSkills = async () => {
             try {
-                const response = await sendRequest('PUT', 'http://localhost:8000/api/user-skills/', skills);
+                const response = await sendRequest('GET', 'http://localhost:8000/api/user-skills/');
+                setSkills(response.skills);
+            } catch (err) {
+                console.error("Skills fetch error:", err);
+                setError("Failed to fetch skills. Please try again.");
+            }
+        };
+        fetchSkills();
+    }, [skills.length]);
+
+
+        const handleSkillsUpload = async (e) => {
+            try {
+                e.preventDefault()
+                const skill = input
+                const response = await sendRequest('PUT', 'http://localhost:8000/api/add-skill/', {skill});
+                setSkills([...skills, input]);
+                setInput('');
 
             }catch (err) {
                 console.error("Skills update error:", err);
-                // setError("Failed to update skills. Please try again.");
             }
         }
-
-
         return (
             <>
                 <form onSubmit={handleFileUpload} className="resume-form">
@@ -61,22 +79,25 @@ const ResumeForm = () => {
                     </fieldset>
                 </form>
 
-                <form onSubmit={handleSkills} className="resume-form">
+                {/*<form onSubmit={handleSkills} className="resume-form">*/}
+                <form className="resume-form">
                     <fieldset className="resume-form-fieldset">
                         <legend className="resume-form-legend">Your Skills</legend>
                         <label className="resume-form-label">Skills</label>
                         <input
                             className="resume-form-input"
                             type="text"
-                            onChange={handleSkillsChange}
-                            placeholder="Add skill (comma-separated)"
+                            value = {input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Add skill"
                         />
                         <ul className="resume-form-ul">
                             {skills && skills.map((skill, index) => (
                                 <li key={index} className="resume-form-li">{skill}</li>
                             ))}
                         </ul>
-                        <button type="submit" className="resume-form-button">Add Skills</button>
+                        {/*<button type="submit" className="resume-form-button">Add Skills</button>*/}
+                        <button onClick={handleSkillsUpload} className="resume-form-button">Add Skills</button>
                     </fieldset>
                 </form>
 
