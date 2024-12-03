@@ -96,6 +96,7 @@ class AddUserSkill(APIView):
         Add a skill to the authenticated user's profile.
         """
         skill_name = request.data.get('skill')
+        print(skill_name)
         if not skill_name:
             return Response({"error": "No skill provided"}, status=status.HTTP_400_BAD_REQUEST)
 
