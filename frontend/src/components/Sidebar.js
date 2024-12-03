@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaHome, FaUser, FaCog, FaSignOutAlt, FaFileUpload } from "react-icons/fa";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { Link } from 'react-router-dom';
@@ -8,16 +8,18 @@ import { useUser } from "../context/UserContext";
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const { user } = useUser();
-  console.log("user: " + user.username);
+  const [colorSchemeFlag, setColorSchemeFlag] = useState(1); 
 
-  const [colorSchemeFlag, setColorSchemeFlag] = useState(1); // 1 for Set A, 0 for Set B
+  useEffect(() => {
+    document.documentElement.setAttribute("data-flag", colorSchemeFlag);
+  }, [colorSchemeFlag]);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const toggleColorScheme = () => {
     setColorSchemeFlag((prevFlag) => {
       const newFlag = prevFlag === 1 ? 0 : 1;
-      document.documentElement.setAttribute("data-flag", newFlag); // Update flag in the DOM
+      document.documentElement.setAttribute("data-flag", newFlag); 
       return newFlag;
     });
   };
@@ -111,11 +113,12 @@ const Sidebar = () => {
           )}
         </li>
       </ul>
-      {/* New Color Scheme Toggle Button */}
+      {/* Color Scheme Toggle Button */}
       <button className="toggle-color-btn" onClick={toggleColorScheme}>
         {colorSchemeFlag === 1 ? "Light Mode" : "Dark Mode"}
       </button>
     </div>
   );
 };
+
 export default Sidebar;
