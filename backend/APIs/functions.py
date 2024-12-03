@@ -75,7 +75,7 @@ class LLM:
         :param skill: Skill for which to generate the questionnaire.
         :return: Generated questionnaire.
         """
-        prompt = f''' Generate 5 questions for the {skill}.
+        prompt = f''' Generate 5 questions for the {skill}. Return valid JSON format, ensuring proper syntax.
         The questions should be of a rating from 1 to 5, 1 being lowest and 5 being highest difficulty. Do not generate any other text
         Question:
         Rating:

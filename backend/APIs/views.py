@@ -53,6 +53,7 @@ class UploadResumeView(APIView):
 
             # Parse content using the LLM
             parsed_data = llm.parse_resume(resume_text)
+            print("printing Parsed data: ", parsed_data)
             if 'error' in parsed_data:
                 return Response({"error": "Parsing failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             parsed_data = jsonify(parsed_data)
@@ -139,8 +140,13 @@ class GenerateQuestionnaireView(APIView):
             if generated_questions==None:
                 print("Not generated")
             print(f"Generated Questions: {generated_questions}")
-            parsed_questions = json.loads(generated_questions)  # Ensure it's parsed into JSON
-            print(parsed_questions)
+            try:
+                parsed_questions = jsonify(generated_questions)
+                print(parsed_questions)
+            except Exception as e:
+                # logger.error(f"JSON parsing error: {str(e)}")
+                return Response({"error": f"Failed to parse LLM response error:{str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
             # Add generated questions to the database
             questionnaire = []
