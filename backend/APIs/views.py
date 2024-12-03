@@ -4,10 +4,11 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import ProfileSerializer, ResumeSerializer
 from .functions import LLM, jsonify
-from .models import Resume, ResumeSkill, UserSkill
+from .models import Resume, ResumeSkill, UserSkill, Questionnaire
 from rest_framework import status
 import os
 import tempfile
+import json
 
 
 class UserProfileView(APIView):
@@ -106,6 +107,68 @@ class AddUserSkill(APIView):
             return Response({"message": "Skill added successfully"}, status=status.HTTP_201_CREATED)
         else:
             return Response({"message": "Skill already exists"}, status=status.HTTP_200_OK)
+
+
+class GenerateQuestionnaireView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """
+        Generate a questionnaire for a given skill.
+        """
+        skill_name = request.data.get('skill')
+        if not skill_name:
+            return Response({"error": "No skill provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the skill exists
+        try:
+            skill = ResumeSkill.objects.get(name=skill_name)
+        except ResumeSkill.DoesNotExist:
+            return Response({"error": f"Skill '{skill_name}' does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Retrieve questions from the database
+        questions = Questionnaire.objects.filter(skill=skill)
+        if questions.exists():
+            questionnaire = [{"question": q.question, "complexity": q.complexity} for q in questions]
+            return Response({"questionnaire": questionnaire}, status=status.HTTP_200_OK)
+
+        # Generate questions using LLM if none exist
+        llm = LLM('gemini-1.5-flash')  # Initialize the LLM model
+        try:
+            generated_questions = llm.generate_questionnaire(skill_name)  # Get raw LLM output
+            if generated_questions==None:
+                print("Not generated")
+            print(f"Generated Questions: {generated_questions}")
+            parsed_questions = json.loads(generated_questions)  # Ensure it's parsed into JSON
+            print(parsed_questions)
+
+            # Add generated questions to the database
+            questionnaire = []
+            for item in parsed_questions:
+                question_text = item.get("Question")
+                complexity_rating = item.get("Rating")
+                # complexity = self.map_complexity(complexity_rating)  # Convert rating to complexity label
+
+                # Create a Questionnaire object
+                new_question = Questionnaire.objects.create(skill=skill, question=question_text, complexity=complexity_rating)
+                questionnaire.append({"question": new_question.question, "complexity": new_question.complexity})
+
+            return Response({"questionnaire": questionnaire}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": f"Failed to generate questionnaire: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # def map_complexity(self, rating):
+    #     """
+    #     Map numeric rating to a complexity label.
+    #     """
+    #     if rating == 1:
+    #         return "easy"
+    #     elif rating in [2, 3]:
+    #         return "medium"
+    #     else:
+    #         return "hard"
+
 
 
 class CounterView(APIView):

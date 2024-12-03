@@ -8,6 +8,7 @@ urlpatterns = [
     path('upload-resume/', UploadResumeView.as_view(), name='upload-resume'),
     path('user-skills/', UserSkillsView.as_view(), name='user-skills'),
     path('add-skill/', AddUserSkill.as_view(), name='add-skill'),
+    path('generate-questionnaire/', GenerateQuestionnaireView.as_view(), name='generate-questionnaire'),
     
 ]
 
