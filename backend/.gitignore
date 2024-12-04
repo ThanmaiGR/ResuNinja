@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 .env
 backenv/
+db.sqlite3
 # ../JobPrepVenv/
 
 # C extensions

@@ -75,7 +75,7 @@ class LLM:
         :param skill: Skill for which to generate the questionnaire.
         :return: Generated questionnaire.
         """
-        prompt = f''' Generate 5 questions for the {skill}.
+        prompt = f''' Generate 5 questions for the {skill}. Return valid JSON format, ensuring proper syntax.
         The questions should be of a rating from 1 to 5, 1 being lowest and 5 being highest difficulty. Do not generate any other text
         Question:
         Rating:
@@ -89,9 +89,9 @@ class LLM:
         :param answers: List of answers.
         :return: Generated feedback.
         """
-        feed = self.flash.generate_content(f"""
+        feed = self.flash.generate_content(f""" Return valid JSON format, ensuring proper syntax.
         Evaluate the answers for the given questions and generate a brief descriptive feedback as well as a quantitative feedback.
-        Quantitative must be on a scale of 1-5 for the following: Knowledge of Skill, Explanation, Approach, Intuition
+        Quantitative must be on a scale of 1-100 for the following: Knowledge of Skill, Explanation, Approach, Intuition
         Feedback must not be question specific but specific points on topics may be mentioned in descriptive
         Questions:{questions}
         Answers:{answers}
