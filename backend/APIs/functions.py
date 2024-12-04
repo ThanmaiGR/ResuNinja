@@ -89,9 +89,9 @@ class LLM:
         :param answers: List of answers.
         :return: Generated feedback.
         """
-        feed = self.flash.generate_content(f"""
+        feed = self.flash.generate_content(f""" Return valid JSON format, ensuring proper syntax.
         Evaluate the answers for the given questions and generate a brief descriptive feedback as well as a quantitative feedback.
-        Quantitative must be on a scale of 1-5 for the following: Knowledge of Skill, Explanation, Approach, Intuition
+        Quantitative must be on a scale of 1-100 for the following: Knowledge of Skill, Explanation, Approach, Intuition
         Feedback must not be question specific but specific points on topics may be mentioned in descriptive
         Questions:{questions}
         Answers:{answers}

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import ProfileSerializer, ResumeSerializer
 from .functions import LLM, jsonify
-from .models import Resume, ResumeSkill, UserSkill, Questionnaire
+from .models import Resume, ResumeSkill, UserSkill, Questionnaire, Feedback
 from rest_framework import status
 import os
 import tempfile
@@ -175,6 +175,40 @@ class GenerateQuestionnaireView(APIView):
     #     else:
     #         return "hard"
 
+class GenerateFeedbackView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """
+        Generate LLM-based feedback for a given skill's questionnaire.
+        """
+        skill_name = request.data.get("skill")
+        answers = request.data.get("answers")  # User's answers to the questions
+
+        if not skill_name or not answers:
+            return Response({"error": "Skill and answers are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Fetch questions for the skill
+            questions = Questionnaire.objects.filter(skill__name=skill_name)
+            if not questions.exists():
+                return Response({"error": f"No questions found for skill '{skill_name}'."}, status=status.HTTP_404_NOT_FOUND)
+
+            question_texts = [q.question for q in questions]
+            
+            # Generate feedback using the LLM
+            llm = LLM('gemini-1.5-flash')  # Initialize the LLM
+            feedback = llm.generate_feedback(questions=question_texts, answers=answers)
+            print(feedback)
+            parsed_feedback = jsonify(feedback)  # Ensure feedback is properly parsed JSON
+            
+            # Save feedback to the database
+            
+
+            return Response({"feedback": parsed_feedback}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": f"Failed to generate feedback: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CounterView(APIView):
