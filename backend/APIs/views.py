@@ -198,12 +198,11 @@ class GenerateFeedbackView(APIView):
             
             # Generate feedback using the LLM
             llm = LLM('gemini-1.5-flash')  # Initialize the LLM
-            feedback = llm.generate_feedback(questions=question_texts, answers=answers)
+            feedback = llm.generate_feedback_per_skill(questions=question_texts, answers=answers)
             print(feedback)
             parsed_feedback = jsonify(feedback)  # Ensure feedback is properly parsed JSON
             
             # Save feedback to the database
-            
 
             return Response({"feedback": parsed_feedback}, status=status.HTTP_201_CREATED)
 
