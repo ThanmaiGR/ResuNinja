@@ -1,4 +1,4 @@
-// src/components/Alerts.js
+// src/components/Alerts.jsx
 import { useAlert } from '../context/AlertContext';
 import '../styles/Alerts.css'; // Import CSS
 

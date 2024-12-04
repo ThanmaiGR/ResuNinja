@@ -1,4 +1,4 @@
-import Feedback from "../components/Feedback.js"
+import Feedback from "../components/Feedback.jsx"
 import { useLocation } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import {useUser} from "../context/UserContext";

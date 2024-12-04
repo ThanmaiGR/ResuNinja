@@ -203,6 +203,7 @@ class GenerateFeedbackView(APIView):
             parsed_feedback = jsonify(feedback)  # Ensure feedback is properly parsed JSON
             
             # Save feedback to the database
+            feedback_obj = Feedback.objects.create(user=request.user, feedback_content=parsed_feedback)
 
             return Response({"feedback": parsed_feedback}, status=status.HTTP_201_CREATED)
 

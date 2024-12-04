@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaHome, FaUser, FaCog, FaSignOutAlt, FaFileUpload, FaBlackTie  } from "react-icons/fa";
+import { FaHome, FaUser, FaCog, FaSignOutAlt, FaFileUpload, FaBlackTie, FaBriefcase } from "react-icons/fa";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { Link } from 'react-router-dom';
 import "../styles/Sidebar.css";
@@ -58,17 +58,7 @@ const Sidebar = () => {
                         <FaUser/>
                     )}
                 </li>
-                <li>
-                    {isOpen ? (
-                        <span>
-                  <Link to="/settings" className="link">
-                    <FaCog/> Settings
-                  </Link>
-                </span>
-                    ) : (
-                        <FaCog/>
-                    )}
-                </li>
+
 
                 <li>
                     {isOpen ? (
@@ -88,6 +78,18 @@ const Sidebar = () => {
                 </span>
                     ) : (
                         <FaBlackTie/>
+                    )}
+                </li>
+
+                <li>
+                    {isOpen ? (
+                        <span>
+                  <Link to="/project-interview" className="link">
+                    <FaBriefcase/> Project Interview
+                  </Link>
+                </span>
+                    ) : (
+                        <FaBriefcase/>
                     )}
                 </li>
                 <li>

@@ -1,20 +1,18 @@
-// src/routes/AppRoutes.js
+// src/routes/AppRoutes.jsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import ProfilePage from '../pages/ProfilePage';
-import SettingsPage from '../pages/SettingsPage';
 import FeedbackPage from '../pages/FeedbackPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import LogoutPage from "../pages/LogoutPage";
 import ResumePage from "../pages/ResumePage";
 import InterviewPage from "../pages/InterviewPage";
+import ProjectInterviewPage from "../pages/ProjectInterviewPage";
 
-import Testcount from "../pages/Testcount";
 const AppRoutes = () => (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/settings" element={<SettingsPage />} />
       <Route path="/profile/:username" element={<ProfilePage />} />
       <Route path="/profile/:username/:feedback" element={<FeedbackPage />} />
       <Route path="/login" element={<LoginPage />} />
@@ -22,8 +20,8 @@ const AppRoutes = () => (
       <Route path="/logout" element={<LogoutPage />} />
       <Route path="/resume" element={<ResumePage />} />
       <Route path="/interview" element={<InterviewPage />} />
+      <Route path="/project-interview" element={<ProjectInterviewPage />} />
 
-      <Route path="/test" element={<Testcount />} />
     </Routes>
 );
 
