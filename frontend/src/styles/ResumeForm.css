@@ -1,5 +1,14 @@
 @import url('color-schemes.css');
 
+.resume-form-div{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    /*flex-direction: column;*/
+    max-height: 90vh;
+}
 .resume-form {
     background-color: var(--col1);
     color: var(--col3);
@@ -8,12 +17,17 @@
     justify-content: center;
     align-items: center;
     padding: 40px;
-    margin: 50px auto;
+    margin: 30px auto;
     width: 400px;
     border-radius: 10px;
     box-shadow: 0 24px 24px var(--col2);
 }
 
+.resume-form-fieldset{
+        overflow: auto;
+        max-height: 50vh;
+
+}
 .resume-form-input {
     width: 300px;
     height: 30px;
@@ -80,12 +94,27 @@
     flex-wrap: wrap;
 }
 
-.resume-form-div{
-    margin: 10px;
-    padding: 10px;
+
+.delete-skill-button{
+    margin-left: 8px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
     display: flex;
-    justify-content: center;
     align-items: center;
-    /*margin: 10px;*/
-    /*flex-direction: column;*/
+    justify-content: center;
+}
+
+.skill-div{
+    display: flex;
+    align-items: center;
+    margin: 5px;
+    padding: 5px;
+    background: var(--col2);
+    color: var(--col4);
+    border-radius: 5px;
 }

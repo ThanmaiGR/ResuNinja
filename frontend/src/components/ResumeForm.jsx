@@ -9,7 +9,7 @@ const ResumeForm = () => {
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
     const [skills, setSkills] = useState([]);
-    const [projects, setProjects] = useState([]);
+    const [projects, setProjects] = useState(['project1', 'project2']);
     const [input, setInput] = useState('');
     const [projectInput, setProjectInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -52,23 +52,9 @@ const ResumeForm = () => {
     };
 
 
-    useEffect(() => {
-        const fetchSkills = async () => {
-            try {
-                const response = await sendRequest('GET', 'http://localhost:8000/api/user-skills/');
-                setSkills(response.skills);
-                // setProjects(response.projects);
-            } catch (err) {
-                console.error("Skills fetch error:", err);
-                setError("Failed to fetch skills. Please try again.");
-            }
-        };
-        fetchSkills();
-    }, [skills.length]);
-
     const handleSkillsUpload = async (e) => {
-        e.preventDefault();
         try {
+            e.preventDefault();
             const skill = input;
             await sendRequest('PUT', 'http://localhost:8000/api/add-skill/', { skill });
             setSkills([...skills, input]);
@@ -90,6 +76,44 @@ const ResumeForm = () => {
         }
     };
 
+    const handleDeleteSkill = async (index) => {
+        try {
+            const skillToDelete = skills[index];
+            // await sendRequest('DELETE', 'http://localhost:8000/api/delete-skill/', { skill: skillToDelete });
+            setSkills(skills.filter((_, i) => i !== index)); // Update state only after successful deletion
+        } catch (err) {
+            console.error("Skill deletion error:", err);
+            setError("Failed to delete the skill. Please try again.");
+        }
+    };
+
+
+    const handleDeleteProject = async (index) => {
+        try {
+            const projectToDelete = projects[index];
+            // await sendRequest('DELETE', 'http://localhost:8000/api/delete-project/', { project: projectToDelete });
+            setProjects(projects.filter((_, i) => i !== index)); // Update state only after successful deletion
+        } catch (err) {
+            console.error("Project deletion error:", err);
+            setError("Failed to delete the project. Please try again.");
+        }
+    };
+
+
+    useEffect(() => {
+        const fetchSkills = async () => {
+            try {
+                const response = await sendRequest('GET', 'http://localhost:8000/api/user-skills/');
+                setSkills(response.skills);
+                // setProjects(response.projects);
+            } catch (err) {
+                console.error("Skills fetch error:", err);
+                setError("Failed to fetch skills. Please try again.");
+            }
+        };
+        fetchSkills();
+    }, [skills.length, projects.length]);
+
     return (
         <div className="resume-form-div">
             <form onSubmit={handleFileUpload} className="resume-form">
@@ -106,7 +130,7 @@ const ResumeForm = () => {
                 </fieldset>
             </form>
 
-            <form className="resume-form">
+            <form className="resume-form" onSubmit={handleSkillsUpload}>
                 <fieldset className="resume-form-fieldset">
                     <legend className="resume-form-legend">Your Skills</legend>
                     <input
@@ -117,18 +141,31 @@ const ResumeForm = () => {
                         placeholder="Add skill"
                     />
                     <ul className="resume-form-ul">
-                        {skills && skills.map((skill, index) => (
-                            <li key={index} className="resume-form-li">{skill}</li>
+                        {skills && skills.sort().map((skill, index) => (
+                            <div className='skill-div'>
+                                <li key={index} className="resume-form-li">{skill}</li>
+                                <button
+                                    className="delete-skill-button"
+                                    onClick={(e) => {
+                                        e.preventDefault(); // Prevent page reload
+                                        handleDeleteSkill(index);
+                                    }}
+                                >
+                                    &times;
+                                </button>
+
+                            </div>
                         ))}
                     </ul>
-                    <button onClick={handleSkillsUpload} className="resume-form-button">Add Skills</button>
-                    {skills.length > 0 && (
-                        <button onClick={interview} className="resume-form-button">Proceed to interview</button>
-                    )}
                 </fieldset>
+                <button type="submit" className="resume-form-button">Add Skills</button>
+            {skills.length > 0 && (
+                <button onClick={interview} className="resume-form-button">Proceed to interview</button>
+                    )}
             </form>
 
-            <form className="resume-form">
+
+            <form className="resume-form" onSubmit={handleProjectUpload}>
                 <fieldset className="resume-form-fieldset">
                     <legend className="resume-form-legend">Your Projects</legend>
                     <input
@@ -139,15 +176,29 @@ const ResumeForm = () => {
                         placeholder="Add project"
                     />
                     <ul className="resume-form-ul">
-                        {projects && projects.map((project, index) => (
-                            <li key={index} className="resume-form-li">{project}</li>
+
+                        {projects && projects.sort().map((project, index) => (
+                            <div className='skill-div'>
+                                <li key={index} className="resume-form-li">{project}</li>
+                                <button
+                                    className="delete-skill-button"
+                                    onClick={(e) => {
+                                        e.preventDefault(); // Prevent page reload
+                                        handleDeleteProject(index);
+                                    }}
+                                >
+                                    &times;
+                                </button>
+
+                            </div>
                         ))}
                     </ul>
-                    <button onClick={handleProjectUpload} className="resume-form-button">Add Project</button>
-                     {projects.length > 0 && (
+                    </fieldset>
+
+                    <button type="submit" className="resume-form-button">Add Project</button>
+                    {projects.length > 0 && (
                         <button onClick={projectinterview} className="resume-form-button">Proceed to Project interview</button>
                     )}
-                </fieldset>
             </form>
         </div>
     );
