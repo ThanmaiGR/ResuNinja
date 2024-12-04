@@ -63,7 +63,7 @@ const ResumeForm = () => {
             }
         }
         return (
-            <>
+            <b className='resume-form-div'>
                 <form onSubmit={handleFileUpload} className="resume-form">
                     <fieldset className="resume-form-fieldset">
                         <legend className="resume-form-legend">Upload Resume</legend>
@@ -101,7 +101,7 @@ const ResumeForm = () => {
                     </fieldset>
                 </form>
 
-            </>
+            </b>
         );
 }
 
