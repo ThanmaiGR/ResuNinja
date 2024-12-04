@@ -5,7 +5,6 @@ const InterviewForm = (props) => {
     const sendRequest = UseRequest();
     const [data, SetData] = useState({
         questions: [],
-        ratings: [],
         answers: []
     });
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -14,17 +13,15 @@ const InterviewForm = (props) => {
 
     const fetchQuestions = async (skill) => {
         try {
-            const response = await sendRequest("POST", `http://localhost:8000/api/generate-questionnaire/`, {skill});
+            const response = await sendRequest("POST", `http://localhost:8000/api/generate-questionnaire-project/`, );
             const { questionnaire } = response;
 
             // Transform the questionnaire to extract questions and ratings
             const questions = questionnaire.map(item => item.question);
-            const ratings = questionnaire.map(item => item.complexity);
 
             // Update the state with the extracted data
             SetData({
                 questions: questions || [], // Extracted questions
-                ratings: ratings || [],     // Extracted ratings (complexities)
                 answers: questions?.map(() => '') || [] // Initialize answers as an array of empty strings
             });
             console.log("DATA", data);
@@ -37,16 +34,17 @@ const InterviewForm = (props) => {
     useEffect(() => {
         // Reset questions and answers when skill changes
         SetData({
-            questions: [],
-            ratings: [],
+            questions: ['Question 1', 'Question 2', 'Question 3'],
             answers: []
         });
         setCurrentQuestion(0);
         setIsAnswered(true);
         // Fetch new questions when the component mounts or skill changes
-        fetchQuestions(props.skill);
+        // fetchQuestions();
         setCurrentQuestion(0); // Reset to the first question
-    }, [props.skill]);
+        console.log("DATA", data);
+    }, [props.project]);
+
 
     const handleNextQuestion = (e) => {
         e.preventDefault();
@@ -78,9 +76,10 @@ const InterviewForm = (props) => {
     };
 
     return (
+        <>
         <form onSubmit={handleNextQuestion} className="interview-form">
             <fieldset className="interview-form-fieldset">
-                <legend className="interview-form-legend">{props.skill}</legend>
+                <legend className="interview-form-legend">{props.project}</legend>
                 <label className="interview-form-label">
                     {`Question ${currentQuestion + 1} of ${data.questions.length}`}
                 </label>
@@ -88,7 +87,6 @@ const InterviewForm = (props) => {
                 <label className="interview-form-label">
                     {data.questions[currentQuestion]}
                 </label>
-                <label className="interview-form-label">Difficulty Rating: {data.ratings[currentQuestion]}/5</label>
                 <br/>
                 {!isAnswered && <span className="interview-form-error">Please provide an answer</span>}
                 <textarea
@@ -103,6 +101,8 @@ const InterviewForm = (props) => {
                 </button>
             </fieldset>
         </form>
+
+        </>
     );
 };
 

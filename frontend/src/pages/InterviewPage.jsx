@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import InterviewForm from "../components/InterviewForm";
 import UseRequest from "../routes/UseRequest";
-
+import {useNavigate} from "react-router-dom";
 const InterviewPage = () => {
+    const navigate = useNavigate();
     const sendRequest = UseRequest();
     const [allSkills, setAllSkills] = useState([]); // All retrieved skills
     const [skills, setSkills] = useState([]); // Selected skills (max 5)
@@ -64,6 +65,9 @@ const InterviewPage = () => {
         }
     };
 
+    if (!hasStarted && allSkills.length === 0) {
+        navigate("/resume"); // Redirect to the resume page if no skills are available
+    }
     return (
         <>
             {!hasStarted ? (

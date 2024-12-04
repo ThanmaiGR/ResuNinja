@@ -3,7 +3,10 @@ import '../styles/RegisterForm.css';
 import {Link} from "react-router-dom";
 import axios from "axios"
 import {useNavigate} from "react-router-dom";
+import {useUser} from "../context/UserContext";
+
 const RegisterForm = () => {
+    const { setUser } = useUser();
 
     const [errorform, setErrorform] = useState({
         username: '',
@@ -35,6 +38,8 @@ const RegisterForm = () => {
             localStorage.setItem('access_token', response.data.access_token);
             localStorage.setItem('refresh_token', response.data.refresh_token)
             localStorage.setItem('username', response.data.username)
+            setUser({ username: response.data.username });
+
         }).then(response => {
             navigate('/')
         }).catch(error => {

@@ -27,10 +27,10 @@
   margin-left: 1.5rem;
   margin-bottom: 0.5rem;
   font-weight: bold;
-    border-color: var(--col5);
-    border-style: solid;
-    border-width: thin;
-    border-radius: 0.5rem;
+    /*border-color: var(--col5);*/
+    /*border-style: solid;*/
+    /*border-width: thin;*/
+    /*border-radius: 0.5rem;*/
 }
 
 .interview-form-button{
