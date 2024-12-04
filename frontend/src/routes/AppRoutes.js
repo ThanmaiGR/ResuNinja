@@ -8,7 +8,7 @@ import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import LogoutPage from "../pages/LogoutPage";
 import ResumePage from "../pages/ResumePage";
-
+import InterviewPage from "../pages/InterviewPage";
 
 import Testcount from "../pages/Testcount";
 const AppRoutes = () => (
@@ -21,6 +21,7 @@ const AppRoutes = () => (
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/logout" element={<LogoutPage />} />
       <Route path="/resume" element={<ResumePage />} />
+      <Route path="/interview" element={<InterviewPage />} />
 
       <Route path="/test" element={<Testcount />} />
     </Routes>

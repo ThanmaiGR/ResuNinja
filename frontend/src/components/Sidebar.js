@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaHome, FaUser, FaCog, FaSignOutAlt, FaFileUpload } from "react-icons/fa";
+import { FaHome, FaUser, FaCog, FaSignOutAlt, FaFileUpload, FaBlackTie  } from "react-icons/fa";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { Link } from 'react-router-dom';
 import "../styles/Sidebar.css";
@@ -46,54 +46,75 @@ const Sidebar = () => {
           )}
         </li>
         {user.username ? (
-          <>
-            <li>
-              {isOpen ? (
-                <span>
+            <>
+                <li>
+                    {isOpen ? (
+                        <span>
                   <Link to={`/profile/${user.username}`} className="link">
-                    <FaUser /> Profile
+                    <FaUser/> Profile
                   </Link>
                 </span>
-              ) : (
-                <FaUser />
-              )}
-            </li>
-            <li>
-              {isOpen ? (
-                <span>
+                    ) : (
+                        <FaUser/>
+                    )}
+                </li>
+                <li>
+                    {isOpen ? (
+                        <span>
                   <Link to="/settings" className="link">
-                    <FaCog /> Settings
+                    <FaCog/> Settings
                   </Link>
                 </span>
-              ) : (
-                <FaCog />
-              )}
-            </li>
-            <li>
-              {isOpen ? (
-                <span>
+                    ) : (
+                        <FaCog/>
+                    )}
+                </li>
+
+                <li>
+                    {isOpen ? (
+                        <span>
+              <Link to="/resume" className="link"> <FaFileUpload/> Upload Resume</Link>
+            </span>
+                    ) : (
+                        <FaFileUpload/>
+                    )}
+                </li>
+                <li>
+                    {isOpen ? (
+                        <span>
+                  <Link to="/interview" className="link">
+                    <FaBlackTie/> Interview
+                  </Link>
+                </span>
+                    ) : (
+                        <FaBlackTie/>
+                    )}
+                </li>
+                <li>
+                    {isOpen ? (
+                        <span>
                   <Link to="/logout" className="link">
-                    <FaSignOutAlt /> LogOut
+                    <FaSignOutAlt/> LogOut
                   </Link>
                 </span>
-              ) : (
-                <FaSignOutAlt />
-              )}
-            </li>
-          </>
+                    ) : (
+                        <FaSignOutAlt/>
+                    )}
+                </li>
+            </>
         ) : (
-          <>
-            <li>
-              {isOpen ? (
-                <span>
-                  <Link to="/login" className="link"> <FaUser /> Login</Link>
+            <>
+                <li>
+                    {isOpen ? (
+                        <span>
+                  <Link to="/login" className="link"> <FaUser/> Login</Link>
                 </span>
-              ) : (
-                <FaUser />
-              )}
-            </li>
-            <li>
-              {isOpen ? (
+                    ) : (
+                        <FaUser/>
+                    )}
+                </li>
+                <li>
+                {isOpen ? (
                 <span>
                   <Link to="/signup" className="link"> <FaUser /> Signup</Link>
                 </span>
@@ -103,15 +124,7 @@ const Sidebar = () => {
             </li>
           </>
         )}
-        <li>
-          {isOpen ? (
-            <span>
-              <Link to="/resume" className="link"> <FaFileUpload /> Upload Resume</Link>
-            </span>
-          ) : (
-            <FaFileUpload />
-          )}
-        </li>
+
       </ul>
       {/* Color Scheme Toggle Button */}
       <button className="toggle-color-btn" onClick={toggleColorScheme}>

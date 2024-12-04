@@ -4,7 +4,6 @@ import '../styles/Alerts.css'; // Import CSS
 
 export default function Alerts() {
     const { alerts } = useAlert();
-
     return (
         <div className="alert-container">
             {alerts.map((alert) => (

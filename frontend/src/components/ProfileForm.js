@@ -34,7 +34,7 @@ const ProfileForm = (props) => {
     function viewFeedback(){
         console.log(user.feedback);
         // navigate(`/profile/${user.username}/feedback`, {state: {'feedback' : user.feedback}});
-        navigate(`/profile/${user.username}/feedback`, {state: {'user' : user}});
+        navigate(`/profile/${props.profile.username || user.username}/feedback`, {state: {'user' : user}});
 
     }
 
