@@ -48,4 +48,4 @@ class Feedback(models.Model):
     feedback_content = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"Feedback for {self.user.username} on {self.datetime}"
+        return f"Feedback for {self.user.username} on {self.datetime} is {self.feedback_content}"

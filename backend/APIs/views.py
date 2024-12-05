@@ -237,7 +237,7 @@ class GenerateFeedbackView(APIView):
             return Response({"error": f"Failed to generate feedback: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-'''class GenerateOverallFeedbackView(APIView):
+class GenerateOverallFeedbackView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -259,17 +259,21 @@ class GenerateFeedbackView(APIView):
             llm = LLM('gemini-1.5-flash')
 
             # Use the LLM function to generate overall feedback
-            overall_feedback = generate_overall_feedback(llm, all_feedback)
+            overall_feedback = llm.generate_overall_feedback(all_feedback)
 
-            # Save the overall feedback in the session
-            request.session["overall_feedback"] = overall_feedback
+            Feedback.objects.create(
+                user=request.user,  # Store the feedback for the logged-in user
+                feedback_content=overall_feedback  # Store the generated feedback
+            )
+            testFeedback=Feedback.objects.filter(user=request.user)
+            print(testFeedback)
 
             return Response({"overall_feedback": overall_feedback}, status=status.HTTP_200_OK)
 
         except ValueError as ve:
             return Response({"error": str(ve)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
-            return Response({"error": f"Unexpected error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)'''
+            return Response({"error": f"Unexpected error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CounterView(APIView):

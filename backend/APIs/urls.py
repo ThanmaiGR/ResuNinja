@@ -10,6 +10,6 @@ urlpatterns = [
     path('add-skill/', AddUserSkill.as_view(), name='add-skill'),
     path('generate-questionnaire/', GenerateQuestionnaireView.as_view(), name='generate-questionnaire'),
     path('generate-feedback/', GenerateFeedbackView.as_view(), name='generate-feedback'),
-    
+    path('generate-overall-feedback/', GenerateOverallFeedbackView.as_view(), name='generate-overall-feedback'),
 ]
 
