@@ -81,6 +81,20 @@ class LLM:
         Rating:
         '''
         return self.flash.generate_content(prompt).text
+    
+    def generate_project_questionnaire(self, projectName, projects):
+        """
+        Generates a questionnaire for a given skill.
+        :param skill: Skill for which to generate the questionnaire.
+        :return: Generated questionnaire.
+        """
+        prompt = f''' Generate 5 questions for the project:{projectName}. Project description is {projects}. Use this project description to generate question based on the implementation of the project and the tech stack used. Questions should be similar to what could be asked in a technical interview.
+        Return valid JSON format, ensuring proper syntax.
+        The questions should be of a rating from 1 to 5, 1 being lowest and 5 being highest difficulty. Do not generate any other text
+        Question:
+        Rating:
+        '''
+        return self.flash.generate_content(prompt).text
 
     def generate_feedback(self, questions, answers):
         """

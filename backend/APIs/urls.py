@@ -9,6 +9,7 @@ urlpatterns = [
     path('user-skills/', UserSkillsView.as_view(), name='user-skills'),
     path('add-skill/', AddUserSkill.as_view(), name='add-skill'),
     path('generate-questionnaire/', GenerateQuestionnaireView.as_view(), name='generate-questionnaire'),
+    path('generate-project-questionnaire/', GenerateProjectQuestionnaireView.as_view(), name='generate-project-questionnaire'),
     path('generate-feedback/', GenerateFeedbackView.as_view(), name='generate-feedback'),
     path('generate-overall-feedback/', GenerateOverallFeedbackView.as_view(), name='generate-overall-feedback'),
 ]

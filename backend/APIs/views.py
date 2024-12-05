@@ -138,7 +138,7 @@ class GenerateQuestionnaireView(APIView):
         skill_name = request.data.get('skill')
         if not skill_name:
             return Response({"error": "No skill provided"}, status=status.HTTP_400_BAD_REQUEST)
-
+        
         # Check if the skill exists
         try:
             skill = ResumeSkill.objects.get(name=skill_name)
@@ -192,6 +192,61 @@ class GenerateQuestionnaireView(APIView):
     #         return "medium"
     #     else:
     #         return "hard"
+
+
+class GenerateProjectQuestionnaireView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """
+        Generate a questionnaire for a given skill.
+        """
+        skill_name = request.data.get('skill')
+        if not skill_name:
+            return Response({"error": "No skill provided"}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+        # Retrieve questions from the database
+        # questions = Questionnaire.objects.filter(skill=skill_name)
+        # if questions.exists():
+        #     questionnaire = [{"question": q.question, "complexity": q.complexity} for q in questions]
+        #     return Response({"questionnaire": questionnaire}, status=status.HTTP_200_OK)
+
+        # Fetch projects details from DB
+        projects=Resume.objects.filter(user=request.user)
+        print(projects)
+        # Generate questions using LLM if none exist
+        llm = LLM('gemini-1.5-flash')  # Initialize the LLM model
+        try:
+            generated_questions = llm.generate_project_questionnaire(skill_name, projects)  # Get raw LLM output
+            if generated_questions==None:
+                print("Not generated")
+            print(f"Generated Questions: {generated_questions}")
+            try:
+                parsed_questions = jsonify(generated_questions)
+                print(parsed_questions)
+            except Exception as e:
+                # logger.error(f"JSON parsing error: {str(e)}")
+                return Response({"error": f"Failed to parse LLM response error:{str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+            # Add generated questions to the database
+            questionnaire = []
+            for item in parsed_questions:
+                question_text = item.get("Question")
+                complexity_rating = item.get("Rating")
+                # complexity = self.map_complexity(complexity_rating)  # Convert rating to complexity label
+
+                # Create a Questionnaire object
+                # new_question = Questionnaire.objects.create(skill=skill_name, question=question_text, complexity=complexity_rating)
+                questionnaire.append({"question": question_text, "complexity": complexity_rating})
+
+            return Response({"questionnaire": questionnaire}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": f"Failed to generate questionnaire: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 class GenerateFeedbackView(APIView):
     permission_classes = [IsAuthenticated]
