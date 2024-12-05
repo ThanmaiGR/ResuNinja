@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email']#add fields like first_name,last_name,full_name,no_of_yrs_of_exp,linkdin_url,date_joined, profile completion percentage,   
+        #date joined,last login
 
 
 class ResumeSkillSerializer(serializers.ModelSerializer):

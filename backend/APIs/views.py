@@ -109,6 +109,24 @@ class AddUserSkill(APIView):
         else:
             return Response({"message": "Skill already exists"}, status=status.HTTP_200_OK)
 
+    def delete(self, request):
+        """
+        Delete a skill from the authenticated user's profile.
+        """
+        skill_name = request.data.get('skill')
+        if not skill_name:
+            return Response({"error": "No skill provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            skill = ResumeSkill.objects.get(name=skill_name)
+            user_skill = UserSkill.objects.get(user=request.user, skill=skill)
+            user_skill.delete()
+            return Response({"message": "Skill deleted successfully"}, status=status.HTTP_200_OK)
+        except ResumeSkill.DoesNotExist:
+            return Response({"error": f"Skill '{skill_name}' does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except UserSkill.DoesNotExist:
+            return Response({"error": f"Skill '{skill_name}' is not associated with the user"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class GenerateQuestionnaireView(APIView):
     permission_classes = [IsAuthenticated]
@@ -202,13 +220,56 @@ class GenerateFeedbackView(APIView):
             print(feedback)
             parsed_feedback = jsonify(feedback)  # Ensure feedback is properly parsed JSON
             
-            # Save feedback to the database
-            
+            # Save feedback to the session
+            session_key = f"feedback_{skill_name}"
+            request.session[session_key] = parsed_feedback
+            # Testing session storage
+            for key, value in request.session.items():
+                if key.startswith("feedback_"):
+                    skill_name = key.split("feedback_")[1]
+                    print(skill_name, value)
 
-            return Response({"feedback": parsed_feedback}, status=status.HTTP_201_CREATED)
+            return Response({"feedback": parsed_feedback, "session_key": session_key}, status=status.HTTP_201_CREATED)
+
+            #return Response({"feedback": parsed_feedback}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({"error": f"Failed to generate feedback: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+'''class GenerateOverallFeedbackView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """
+        Generate an overall feedback for all skills stored in the session.
+        """
+        try:
+            # Collect all feedback from session
+            all_feedback = {}
+            for key, value in request.session.items():
+                if key.startswith("feedback_"):
+                    skill_name = key.split("feedback_")[1]
+                    all_feedback[skill_name] = value
+
+            if not all_feedback:
+                return Response({"error": "No feedback available in the session."}, status=status.HTTP_404_NOT_FOUND)
+
+            # Initialize LLM
+            llm = LLM('gemini-1.5-flash')
+
+            # Use the LLM function to generate overall feedback
+            overall_feedback = generate_overall_feedback(llm, all_feedback)
+
+            # Save the overall feedback in the session
+            request.session["overall_feedback"] = overall_feedback
+
+            return Response({"overall_feedback": overall_feedback}, status=status.HTTP_200_OK)
+
+        except ValueError as ve:
+            return Response({"error": str(ve)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({"error": f"Unexpected error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)'''
 
 
 class CounterView(APIView):
