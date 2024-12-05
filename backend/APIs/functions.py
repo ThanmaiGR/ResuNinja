@@ -82,23 +82,6 @@ class LLM:
         '''
         return self.flash.generate_content(prompt).text
 
-    # def generate_feedback(self, questions, answers):
-    #     """
-    #     Generates feedback for a set of questions and answers.
-    #     :param questions: List of questions.
-    #     :param answers: List of answers.
-    #     :return: Generated feedback.
-    #     """
-    #     feed = self.flash.generate_content(f""" Return valid JSON format, ensuring proper syntax.
-    #     Evaluate the answers for the given questions and generate a brief descriptive feedback as well as a quantitative feedback.
-    #     Quantitative must be on a scale of 1-100 for the following: Knowledge of Skill, Explanation, Approach, Intuition
-    #     Feedback must not be question specific but specific points on topics may be mentioned in descriptive
-    #     Questions:{questions}
-    #     Answers:{answers}
-    #     Descriptive FeedBack:
-    #     """)
-
-    #     return feed.text
     def generate_feedback(self, questions, answers):
         """
         Generates feedback for a set of questions and answers.
@@ -123,3 +106,14 @@ class LLM:
         """)
 
         return feed.text
+    def generate_overall_feedback(self, feedback):
+        """
+        Generates overall feedback for a set of feedbacks.
+        :param feedback: List of feedbacks.
+        :return: Generated overall feedback.
+        """
+        return self.flash.generate_content(f""" Return valid JSON format, ensuring proper syntax.
+        Generate an overall feedback for the given feedbacks.
+        Feedbacks:{feedback}
+        Overall Feedback:
+        """).text

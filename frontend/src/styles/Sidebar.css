@@ -44,7 +44,7 @@
   color: aqua;
 }
 .menu li:hover {
-  background-color: var(--col5); 
+  background-color: var(--col4);
 }
 
 .menu li svg {

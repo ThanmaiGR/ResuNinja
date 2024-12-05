@@ -19,23 +19,23 @@
 }
 
 .alert-toast.success {
-    background-color: var(--col4); 
-    color: white;
+    background-color: var(--col4);
+    color: var(--col1);
 }
 
 .alert-toast.error {
     background-color: var(--col1);  
-    color: white;
+    color: var(--col4);
 }
 
 .alert-toast.warning {
     background-color: var(--col5);  
-    color: white;
+    color: var(--col1);
 }
 
 .alert-toast.info {
     background-color: var(--col2); 
-    color: white;
+    color: var(--col1);
 }
 
 @keyframes slide-in {
