@@ -337,3 +337,15 @@ class GenerateOverallFeedbackView(APIView):
             return Response({"error": str(ve)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({"error": f"Unexpected error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class AllFeedbacks(APIView):
+    def get(self, request):
+        """
+        Retrieve all feedbacks.
+        """
+        feedbacks = Feedback.objects.filter(user=request.user)
+        feedback_data=[]
+        for feedback in feedbacks:
+            feedback_data.append(feedback.feedback_content)
+        return Response({"feedbacks": feedback_data}, status=status.HTTP_200_OK)
