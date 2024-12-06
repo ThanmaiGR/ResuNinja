@@ -324,6 +324,7 @@ class GenerateOverallFeedbackView(APIView):
                 user=request.user,  # Store the feedback for the logged-in user
                 feedback_content=overall_feedback  # Store the generated feedback
             )
+            overall_feedback=jsonify(overall_feedback)
             testFeedback=Feedback.objects.filter(user=request.user)
             print(testFeedback)
             
