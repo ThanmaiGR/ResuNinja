@@ -323,7 +323,7 @@ class GenerateOverallFeedbackView(APIView):
             testFeedback=Feedback.objects.filter(user=request.user)
             print(testFeedback)
 
-            return Response({"overall_feedback": overall_feedback}, status=status.HTTP_200_OK)
+            return Response({"overall_feedback": overall_feedback, 'all_feedback':all_feedback}, status=status.HTTP_200_OK)
 
         except ValueError as ve:
             return Response({"error": str(ve)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
