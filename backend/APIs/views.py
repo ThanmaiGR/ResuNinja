@@ -302,10 +302,14 @@ class GenerateOverallFeedbackView(APIView):
         try:
             # Collect all feedback from session
             all_feedback = {}
+            keys_to_clear=[]
+            all_skills=[]
             for key, value in request.session.items():
                 if key.startswith("feedback_"):
                     skill_name = key.split("feedback_")[1]
+                    all_skills.append(skill_name)
                     all_feedback[skill_name] = value
+                    keys_to_clear.append(key)
 
             if not all_feedback:
                 return Response({"error": "No feedback available in the session."}, status=status.HTTP_404_NOT_FOUND)
@@ -322,34 +326,14 @@ class GenerateOverallFeedbackView(APIView):
             )
             testFeedback=Feedback.objects.filter(user=request.user)
             print(testFeedback)
+            
+            # clear session data
+            for key in keys_to_clear:
+                del request.session[key]
 
-            return Response({"overall_feedback": overall_feedback, 'all_feedback':all_feedback}, status=status.HTTP_200_OK)
+            return Response({"overall_feedback": overall_feedback, 'all_feedback':all_feedback, 'all_skills':all_skills}, status=status.HTTP_200_OK)
 
         except ValueError as ve:
             return Response({"error": str(ve)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({"error": f"Unexpected error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class CounterView(APIView):
-    # authentication_classes = [JWTAuthentication]
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        """
-        Retrieve the current counter value from the session.
-        """
-        print(f"Session Key: {request.session.session_key}")
-        print(f"Session Data: {request.session.items()}")
-        counter = request.session.get('counter', 0)
-        return Response({"counter": counter})
-
-    def post(self, request):
-        """
-        Increment the counter in the session by 1.
-        """
-        counter = request.session.get('counter', 0)
-        counter += 1
-        request.session['counter'] = counter
-        return Response({"message": "Counter updated", "counter": counter})
