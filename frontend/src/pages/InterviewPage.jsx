@@ -40,18 +40,19 @@ const InterviewPage = () => {
         });
     };
 
-    const handleCompleteSkill = (data) => {
+    const handleCompleteSkill =  async (data) => {
         console.log(`Answers for ${skills[currentSkill]}:`, data);
         try{
-            const feedback = sendRequest("POST", "http://localhost:8000/api/generate-feedback/", {skill: skills[currentSkill], answers: data.answers});
-            console.log(feedback);
+            const feedback = await sendRequest("POST", "http://localhost:8000/api/generate-feedback/", {skill: skills[currentSkill], answers: data.answers, questions: data.questions});
+            // console.log(feedback);
         } catch (error) {
             console.error("Error:", error);
         }
         if (currentSkill === skills.length - 1) {
             console.log("Interview process completed for all skills!");
-            setCurrentSkill(0); // Reset to the first skill if needed
-            setHasStarted(false); // Reset the state for a new interview
+            navigate("/feedback"); // Redirect to the home page
+            // setCurrentSkill(0); // Reset to the first skill if needed
+            // setHasStarted(false); // Reset the state for a new interview
         } else {
             setCurrentSkill(currentSkill + 1); // Move to the next skill
         }
@@ -60,6 +61,7 @@ const InterviewPage = () => {
     const handleStartInterview = () => {
         if (skills.length > 0) {
             setHasStarted(true);
+            localStorage.setItem("skills", JSON.stringify(skills));
         } else {
             alert("Please select at least one skill to start the interview.");
         }

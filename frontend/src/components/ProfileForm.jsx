@@ -59,58 +59,60 @@ const ProfileForm = (props) => {
         }
     }
     return(
-    <>
-        <h2>User Details of {user.username}</h2>
-        <form className='profile-form' onSubmit={saveChanges}>
-            <label>Name: </label>
-            <input
-                type="text"
-                value={props.profile.name || user.name}
-                className='input-box'
-                onChange={handleChange}
-                name="name"
-            /><br/>
-            <label>Username: </label>
-            <input
-                type="text"
-                value={props.profile.username || user.username}
-                disabled
-                className='input-box'
-                onChange={handleChange}
-                name="username"
-            /><br/>
-            <label>Email: </label>
-            <input
-                type="email"
-                value={props.profile.email || user.email}
-                disabled
-                className='input-box'
-                onChange={handleChange}
-                name="email"
-            /><br/>
-            <label>Contact: </label>
-            <input
-                type="text"
-                value={props.profile.contact || user.contact}
-                className='input-box'
-                onChange={handleChange}
-                name="contact"
-            /><br/>
-            <label>Country: </label>
-            <input
-                type="text"
-                value={props.profile.country || user.country}
-                className='input-box'
-                onChange={handleChange}
-                name="country"
-            /><br/>
+        <b className='profile-form-div'>
+            <h2>User Details of {props.profile.username || user.username}</h2>
+
+            <form className='profile-form' onSubmit={saveChanges}>
+                <label>Name: </label>
+                <input
+                    type="text"
+                    value={props.profile.name || user.name}
+                    className='input-box'
+                    onChange={handleChange}
+                    name="name"
+                /><br/>
+                <label>Username: </label>
+                <input
+                    type="text"
+                    value={props.profile.username || user.username}
+                    disabled
+                    className='input-box'
+                    onChange={handleChange}
+                    name="username"
+                /><br/>
+                <label>Email: </label>
+                <input
+                    type="email"
+                    value={props.profile.email || user.email}
+                    disabled
+                    className='input-box'
+                    onChange={handleChange}
+                    name="email"
+                /><br/>
+                <label>Contact: </label>
+                <input
+                    type="text"
+                    value={props.profile.contact || user.contact}
+                    className='input-box'
+                    onChange={handleChange}
+                    name="contact"
+                /><br/>
+                <label>Country: </label>
+                <input
+                    type="text"
+                    value={props.profile.country || user.country}
+                    className='input-box'
+                    onChange={handleChange}
+                    name="country"
+                /><br/>
+
+                <button className="state--value">
+                    Save Changes
+                </button>
+            </form>
             <button onClick={viewFeedback} className='feedback-button'>View FeedBacks >></button>
 
-            <button className="state--value">
-              Save Changes
-            </button>
-        </form>
-    </>
+        </b>
     )
 }
 

@@ -104,22 +104,29 @@ class LLM:
         :return: Generated feedback.
         """
         feed = self.flash.generate_content(f"""Return valid JSON format, ensuring proper syntax.
-        Evaluate the answers for the given questions and generate a brief descriptive feedback as well as a quantitative feedback.
+        Evaluate the answers for the given questions and generate feedback.
+
+        Feedback must focus on the user’s ability to express their thoughts clearly and effectively, with a focus on technical accuracy and problem-solving abilities.
+        Provide specific examples where the user can improve or where they excel, to help them better prepare for real-world interview scenarios.
+        Questions: {questions}
+        Answers: {answers}
+        The feedback should be as a whole, not individual feedback for each question.
+        Format:
+        descriptive: string
+        quantitative: dictionary
+        
+        
+        Do not include any other text in the response.
         Quantitative must be on a scale of 1-10 for the following:
         1. Technical Proficiency
         2. Critical Thinking & Problem-Solving
         3. Clarity & Expression
         4. Practical Application & Relevance
         5. Depth of Explanation
-        
-        Feedback must focus on the user’s ability to express their thoughts clearly and effectively, with a focus on technical accuracy and problem-solving abilities.
-        Provide specific examples where the user can improve or where they excel, to help them better prepare for real-world interview scenarios.
-        Questions: {questions}
-        Answers: {answers}
-        Descriptive Feedback:
         """)
 
         return feed.text
+
     def generate_overall_feedback(self, feedback):
         """
         Generates overall feedback for a set of feedbacks.
@@ -127,7 +134,10 @@ class LLM:
         :return: Generated overall feedback.
         """
         return self.flash.generate_content(f""" Return valid JSON format, ensuring proper syntax.
-        Generate an overall feedback for the given feedbacks.
+        Generate an overall feedback for the given feedbacks in the same format with no extra content.
         Feedbacks:{feedback}
-        Overall Feedback:
+        Format:
+        general_feedback: string
+        strengths: []
+        recommendations: []
         """).text

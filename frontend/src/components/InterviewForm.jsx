@@ -16,7 +16,6 @@ const InterviewForm = (props) => {
         try {
             const response = await sendRequest("POST", `http://localhost:8000/api/generate-questionnaire/`, {skill});
             const { questionnaire } = response;
-
             // Transform the questionnaire to extract questions and ratings
             const questions = questionnaire.map(item => item.question);
             const ratings = questionnaire.map(item => item.complexity);
