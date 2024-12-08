@@ -79,7 +79,7 @@ const ResumeForm = () => {
     const handleDeleteSkill = async (index) => {
         try {
             const skillToDelete = skills[index];
-            // await sendRequest('DELETE', 'http://localhost:8000/api/delete-skill/', { skill: skillToDelete });
+            await sendRequest('DELETE', 'http://localhost:8000/api/add-skill/', { skill: skillToDelete });
             setSkills(skills.filter((_, i) => i !== index)); // Update state only after successful deletion
         } catch (err) {
             console.error("Skill deletion error:", err);
@@ -91,7 +91,7 @@ const ResumeForm = () => {
     const handleDeleteProject = async (index) => {
         try {
             const projectToDelete = projects[index];
-            // await sendRequest('DELETE', 'http://localhost:8000/api/delete-project/', { project: projectToDelete });
+            await sendRequest('DELETE', 'http://localhost:8000/api/delete-project/', { project: projectToDelete });
             setProjects(projects.filter((_, i) => i !== index)); // Update state only after successful deletion
         } catch (err) {
             console.error("Project deletion error:", err);

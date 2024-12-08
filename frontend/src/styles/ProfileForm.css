@@ -21,7 +21,7 @@
     flex-direction: column;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
     padding: 20px;
-    background-color: var(--col1);  
+    background-color: var(--col1);
     border: 1px solid var(--col4);  
 }
 
@@ -29,7 +29,7 @@
     margin-top: 1em;
     margin-bottom: 1em;
     color: white;
-    background-color: var(--col5);  
+    background-color: var(--col5);
     width: 25%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
 }

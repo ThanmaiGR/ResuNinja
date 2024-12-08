@@ -1,0 +1,20 @@
+@import "color-schemes.css";
+
+.overall-feedback{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.feedback{
+    margin-bottom: 10px;
+}
+
+.body{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: auto;
+}

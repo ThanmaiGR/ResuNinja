@@ -13,7 +13,7 @@ const InterviewForm = (props) => {
 
     const fetchQuestions = async (skill) => {
         try {
-            const response = await sendRequest("POST", `http://localhost:8000/api/generate-questionnaire-project/`, );
+            const response = await sendRequest("POST", `http://localhost:8000/api/generate-project-questionnaire/`, );
             const { questionnaire } = response;
 
             // Transform the questionnaire to extract questions and ratings
