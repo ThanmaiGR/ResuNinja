@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import {useUser} from "../context/UserContext";
 export default  function FeedbackPage() {
     const location = useLocation();
-    const feedback = location.state?.user.feedback || []; // Handle missing state gracefully
   const { user } = useUser();
     return (
         <>
-            <Feedback feedback={feedback} />
+            <Feedback />
             <Link to={`/profile/${user.username}/`}>Back to Profile</Link>
         </>
     )

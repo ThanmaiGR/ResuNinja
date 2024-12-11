@@ -10,7 +10,7 @@ import ResumePage from "../pages/ResumePage";
 import InterviewPage from "../pages/InterviewPage";
 import ProjectInterviewPage from "../pages/ProjectInterviewPage";
 import InterviewFeedbackPage from "../pages/InterviewFeedbackPage";
-
+import ProjectFeedbackPage from "../pages/ProjectFeedbackPage";
 const AppRoutes = () => (
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -23,7 +23,7 @@ const AppRoutes = () => (
       <Route path="/interview" element={<InterviewPage />} />
       <Route path="/project-interview" element={<ProjectInterviewPage />} />
       <Route path="/feedback" element={<InterviewFeedbackPage />} />
-
+      <Route path="/project-feedback" element={<ProjectFeedbackPage />} />
     </Routes>
 );
 

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import ProfileSerializer, ResumeSerializer
 from .functions import LLM, jsonify
-from .models import Profile, Resume, ResumeSkill, UserSkill, Questionnaire, Feedback
+from .models import Profile, Resume, ResumeSkill, UserSkill, Questionnaire, Feedback, Project
 from django.contrib.auth.models import User
 from rest_framework import status
 import os
@@ -74,22 +74,38 @@ class UploadResumeView(APIView):
 
             # Parse content using the LLM
             parsed_data = llm.parse_resume(resume_text)
-            print("printing Parsed data: ", parsed_data)
             if 'error' in parsed_data:
                 return Response({"error": "Parsing failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             parsed_data = jsonify(parsed_data)
             # Update database with parsed data
             user_resume.certifications = parsed_data.get("Certifications", "")
-            user_resume.projects = parsed_data.get("Projects", "")
             user_resume.save()
+
             # Add extracted skills
             skills = parsed_data.get("Skills", [])
             for skill_name in skills:
                 skill, _ = ResumeSkill.objects.get_or_create(name=skill_name)
                 UserSkill.objects.get_or_create(user=request.user, skill=skill)
 
-            return Response({"message": "Resume uploaded and processed successfully", "skills": skills},
-                            status=status.HTTP_201_CREATED)
+            print("Successfully added skills")
+
+            projects = parsed_data.get("Projects", [])
+            for project in projects:
+                title = project.get("title")
+                tech_stack = project.get("tech_stack")
+                description = project.get("description")
+                Project.objects.get_or_create(
+                    user=request.user,
+                    title=title,
+                    tech_stack=tech_stack,
+                    description=description
+                )
+
+            print("Successfully added projects")
+            return Response(
+                {"message": "Resume uploaded and processed successfully", "skills": skills, "projects": projects},
+                status=status.HTTP_201_CREATED
+            )
 
         except Exception as e:
             return Response({"error": f"Failed to process resume: {str(e)}"},
@@ -111,6 +127,21 @@ class UserSkillsView(APIView):
         user_skills = UserSkill.objects.filter(user=request.user).select_related('skill')
         skills_data = [user_skill.skill.name for user_skill in user_skills]
         return Response({"skills": skills_data}, status=status.HTTP_200_OK)
+
+
+class UserProjectsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """
+        Retrieve the authenticated user's projects.
+        """
+        user_projects = Project.objects.filter(user=request.user)
+        projects_data = []
+        for project in user_projects:
+            project_data = project.title
+            projects_data.append(project_data)
+        return Response({"projects": projects_data}, status=status.HTTP_200_OK)
 
 
 class AddUserSkill(APIView):
@@ -150,6 +181,42 @@ class AddUserSkill(APIView):
         except UserSkill.DoesNotExist:
             return Response({"error": f"Skill '{skill_name}' is not associated with the user"},
                             status=status.HTTP_404_NOT_FOUND)
+
+
+class AddUserProject(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        """
+        Add a project to the authenticated user's profile.
+        """
+        title = request.data.get('title')
+
+        if not title:
+            return Response({"error": "Title Required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        project, created = Project.objects.get_or_create(user=request.user, title=title)
+        if created:
+            project.save()
+            return Response({"message": "Project added successfully"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"message": "Project already exists"}, status=status.HTTP_200_OK)
+
+
+    def delete(self, request):
+        """
+        Delete a project from the authenticated user's profile.
+        """
+        title = request.data.get('title')
+        if not title:
+            return Response({"error": "No title provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            project = Project.objects.get(user=request.user, title=title)
+            project.delete()
+            return Response({"message": "Project deleted successfully"}, status=status.HTTP_200_OK)
+        except Project.DoesNotExist:
+            return Response({"error": f"Project with title '{title}' does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class GenerateQuestionnaireView(APIView):
@@ -227,9 +294,9 @@ class GenerateProjectQuestionnaireView(APIView):
         """
         Generate a questionnaire for a given skill.
         """
-        skill_name = request.data.get('skill')
-        if not skill_name:
-            return Response({"error": "No skill provided"}, status=status.HTTP_400_BAD_REQUEST)
+        project_title = request.data.get('title')
+        if not project_title:
+            return Response({"error": "No project provided"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Retrieve questions from the database
         # questions = Questionnaire.objects.filter(skill=skill_name)
@@ -238,14 +305,13 @@ class GenerateProjectQuestionnaireView(APIView):
         #     return Response({"questionnaire": questionnaire}, status=status.HTTP_200_OK)
 
         # Fetch projects details from DB
-        projects = Resume.objects.filter(user=request.user)
-        print(projects)
+        tech_stack, description = Project.objects.filter(title=project_title).values('tech_stack', 'description').first()
         # Generate questions using LLM if none exist
         llm = LLM('gemini-1.5-flash')  # Initialize the LLM model
         try:
-            generated_questions = llm.generate_project_questionnaire(skill_name, projects)  # Get raw LLM output
+            generated_questions = llm.generate_project_questionnaire(project_title, tech_stack, description)  # Get raw LLM output
             if generated_questions is None:
-                # print("Not generated")
+                print("Not generated")
                 pass
             # print(f"Generated Questions: {generated_questions}")
             try:
@@ -280,29 +346,29 @@ class GenerateFeedbackView(APIView):
         """
         Generate LLM-based feedback for a given skill's questionnaire.
         """
-        skill_name = request.data.get("skill")
+        form_type = request.data.get("type")
+        if form_type == "project":
+            key = "project_"
+            name = request.data.get("title")
+        else:
+            key = "feedback_"
+            name = request.data.get("skill")
         answers = request.data.get("answers")  # User's answers to the questions
         questions = request.data.get("questions")
-        if not skill_name or not answers:
-            return Response({"error": "Skill and answers are required."}, status=status.HTTP_400_BAD_REQUEST)
+        if not questions or not answers:
+            return Response({"error": "Questions and answers are required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Fetch questions for the skill
-            # questions = Questionnaire.objects.filter(skill__name=skill_name)
-            # if not questions.exists():
-            #     return Response({"error": f"No questions found for skill '{skill_name}'."},
-            #                     status=status.HTTP_404_NOT_FOUND)
-
-            # question_texts = [q.question for q in questions]
-
             # Generate feedback using the LLM
             llm = LLM('gemini-1.5-flash')  # Initialize the LLM
             feedback = ''
             parsed_feedback = ''
             while not (
                     parsed_feedback
-                    and (parsed_feedback.get("descriptive") or (not isinstance(parsed_feedback.get("descriptive"), str)))
-                    and (parsed_feedback.get("quantitative") or (not isinstance(parsed_feedback.get("quantitative"), dict)))
+                    and (parsed_feedback.get("descriptive") or (
+            not isinstance(parsed_feedback.get("descriptive"), str)))
+                    and (parsed_feedback.get("quantitative") or (
+            not isinstance(parsed_feedback.get("quantitative"), dict)))
             ):
                 feedback = llm.generate_feedback(questions=questions, answers=answers)
                 print(feedback)
@@ -310,13 +376,13 @@ class GenerateFeedbackView(APIView):
             descriptive, quantitative = parsed_feedback.get("descriptive"), parsed_feedback.get("quantitative")
 
             # Save feedback to the session
-            session_key = f"feedback_{skill_name}"
+            session_key = f"{key}{name}"
             request.session[session_key] = parsed_feedback
 
             # Testing session storage
             for key, value in request.session.items():
                 if key.startswith("feedback_"):
-                    skill_name = key.split("feedback_")[1]
+                    name = key.split("feedback_")[1]
             return Response({"feedback": parsed_feedback, "session_key": session_key}, status=status.HTTP_201_CREATED)
 
             # return Response({"feedback": parsed_feedback}, status=status.HTTP_201_CREATED)
@@ -329,22 +395,30 @@ class GenerateFeedbackView(APIView):
 class GenerateOverallFeedbackView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def post(self, request):
         """
         Generate an overall feedback for all skills stored in the session.
         """
         try:
             # Collect all feedback from session
+            feed_type = request.data.get('type')
+            if feed_type == "project":
+                session_key = "project_"
+                feedback_type = "Project"
+            else:
+                session_key = "feedback_"
+                feedback_type = "Technical"
             all_feedback = {}
             keys_to_clear = []
             all_skills = []
             for key, value in request.session.items():
-                if key.startswith("feedback_"):
-                    skill_name = key.split("feedback_")[1]
-                    all_skills.append(skill_name)
-                    all_feedback[skill_name] = value
+                if key.startswith(session_key):
+                    name = key.split(session_key)[1]
+                    all_skills.append(name)
+                    all_feedback[name] = value
                     keys_to_clear.append(key)
 
+            print(request.session.keys())
             if not all_feedback:
                 return Response({"error": "No feedback available in the session."}, status=status.HTTP_204_NO_CONTENT)
 
@@ -360,7 +434,7 @@ class GenerateOverallFeedbackView(APIView):
             overall_feedback = llm.generate_overall_feedback(all_feedback)
 
             overall_feedback = jsonify(overall_feedback)
-            print(overall_feedback)
+            # print(overall_feedback)
             # quantitative_summary = overall_feedback.get("Quantitative Summary")
             # quantitative_summary = jsonify(quantitative_summary)
             # overall_feedback["Summary"] = quantitative_summary
@@ -369,11 +443,12 @@ class GenerateOverallFeedbackView(APIView):
             # print(overall_feedback)
             Feedback.objects.create(
                 user=request.user,  # Store the feedback for the logged-in user
-                feedback_content=overall_feedback  # Store the generated feedback
+                feedback_content=overall_feedback,  # Store the generated feedback
+                feedback_type=feedback_type,  # Store the feedback
             )
 
             return Response(
-                {"overall_feedback": overall_feedback, 'all_feedback': all_feedback, 'all_skills': all_skills},
+                {"overall_feedback": overall_feedback, 'all_feedback': all_feedback, 'all_skills': all_skills, "type": "Technical"},
                 status=status.HTTP_200_OK)
 
         except ValueError as ve:
@@ -388,21 +463,47 @@ class AllFeedbacks(APIView):
         """
         Retrieve all feedbacks.
         """
-        feedbacks = Feedback.objects.filter(user=request.user)
+        feedbacks = Feedback.objects.filter(user=request.user).order_by('-datetime')  # Order by most recent feedback
         feedback_data = []
         feedback_dates = []
+        feedback_type = []
         for idx, feedback in enumerate(feedbacks):
-            # print(feedback.feedback_content)
             data = feedback.feedback_content
+            feed_type = feedback.feedback_type
             try:
-                cleaned_data = re.sub(r"'", '"', data)
-                cleaned_data = re.sub(r'(\w+):', r'"\1":', cleaned_data)
-                cleaned_data = re.sub(r"\s+", " ", cleaned_data)
-                feed_dict = json.loads(cleaned_data)
+                # Step 1: Escape single quotes inside strings to prevent modification later
+                # Match strings that are enclosed in quotes (either single or double quotes)
+                # print(data)
+                # break
+                # cleaned_data = re.sub(r'(["\'])((?:\\\1|.)*?)\1', r'\1\2\1', data)  # Keeps quotes within strings intact
+                # # Step 2: Now replace single quotes outside of string literals (i.e., apostrophes in words)
+                # cleaned_data = re.sub(r"(?<!\\)'", '"', cleaned_data)  # Replace single quotes outside of strings
+                # # Step 3: Match keys and wrap them in quotes (only alphanumeric, for now)
+                # cleaned_data = re.sub(r'(\w+):', r'"\1":', cleaned_data)
+                # # Step 4: Clean up excessive spaces
+                # cleaned_data = re.sub(r"\s+", " ", cleaned_data)
+                feed_dict = {}
+                pattern = r"'([^']+)':\s*(\[[^\]]*\]|'[^']*'|\"[^\"]*\")"
+                matches = re.findall(pattern, data)
+                key_value_pairs = {key: value.strip("'\"") for key, value in matches}
+                for key, value in key_value_pairs.items():
+                    if key in ["recommendations", "strengths"]:
+                        # value = re.sub(r"'", '"', value)
+                        value = re.sub(r"(?<=\w)'(?=\w)", "__APOSTROPHE__", value)
+                        value = value.replace("'", '"')
+                        value = value.replace("__APOSTROPHE__", "'")
+                        feed_dict[key] = json.loads(value)
+                    else:
+                        feed_dict[key] = value
+                # feed_dict = json.loads(cleaned_data)
+                # print(feed_dict['strengths'])
                 feedback_data.append(feed_dict)
                 date_time = feedback.datetime
                 date_time = date_time.strftime("%H:%M %d-%m-%Y")
                 feedback_dates.append(date_time)
-            except :
+                feedback_type.append(feed_type)
+            except Exception as e:
+                print(idx, value)
                 print("Error for idx", idx)
-        return Response({"feedbacks": feedback_data, "dates": feedback_dates}, status=status.HTTP_200_OK)
+                print(e)
+        return Response({"feedbacks": feedback_data, "dates": feedback_dates, "type": feedback_type}, status=status.HTTP_200_OK)

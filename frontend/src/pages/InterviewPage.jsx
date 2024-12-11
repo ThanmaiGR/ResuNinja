@@ -43,7 +43,7 @@ const InterviewPage = () => {
     const handleCompleteSkill =  async (data) => {
         console.log(`Answers for ${skills[currentSkill]}:`, data);
         try{
-            const feedback = await sendRequest("POST", "http://localhost:8000/api/generate-feedback/", {skill: skills[currentSkill], answers: data.answers, questions: data.questions});
+            const feedback = await sendRequest("POST", "http://localhost:8000/api/generate-feedback/", {skill: skills[currentSkill], answers: data.answers, questions: data.questions, type: "skill"});
             // console.log(feedback);
         } catch (error) {
             console.error("Error:", error);

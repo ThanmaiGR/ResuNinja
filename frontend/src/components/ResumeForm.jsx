@@ -9,7 +9,7 @@ const ResumeForm = () => {
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
     const [skills, setSkills] = useState([]);
-    const [projects, setProjects] = useState(['project1', 'project2']);
+    const [projects, setProjects] = useState([]);
     const [input, setInput] = useState('');
     const [projectInput, setProjectInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -35,6 +35,9 @@ const ResumeForm = () => {
         try {
             const response = await sendRequest('POST', 'http://localhost:8000/api/upload-resume/', formData);
             setSkills(response.skills);
+            setProjects(response.projects.map(project =>
+                project.title
+            ));
             setError(null);
             setLoading(false);
         } catch (err) {
@@ -68,7 +71,7 @@ const ResumeForm = () => {
         e.preventDefault();
         try {
             const project = projectInput;
-            await sendRequest('PUT', 'http://localhost:8000/api/add-project/', { project });
+            await sendRequest('PUT', 'http://localhost:8000/api/add-project/', { title: project });
             setProjects([...projects, projectInput]);
             setProjectInput('');
         } catch (err) {
@@ -91,7 +94,7 @@ const ResumeForm = () => {
     const handleDeleteProject = async (index) => {
         try {
             const projectToDelete = projects[index];
-            await sendRequest('DELETE', 'http://localhost:8000/api/delete-project/', { project: projectToDelete });
+            await sendRequest('DELETE', 'http://localhost:8000/api/add-project/', { title: projectToDelete });
             setProjects(projects.filter((_, i) => i !== index)); // Update state only after successful deletion
         } catch (err) {
             console.error("Project deletion error:", err);
@@ -105,6 +108,8 @@ const ResumeForm = () => {
             try {
                 const response = await sendRequest('GET', 'http://localhost:8000/api/user-skills/');
                 setSkills(response.skills);
+                const response2 = await sendRequest('GET', 'http://localhost:8000/api/user-projects/');
+                setProjects(response2.projects);
                 // setProjects(response.projects);
             } catch (err) {
                 console.error("Skills fetch error:", err);
