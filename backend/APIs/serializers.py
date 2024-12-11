@@ -1,13 +1,24 @@
 from rest_framework import serializers
 from .models import Resume, UserSkill, ResumeSkill, Questionnaire, Feedback
 from django.contrib.auth.models import User
+from APIs.models import Profile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
+
     class Meta:
-        model = User
-        fields = ['username', 'email']#add fields like first_name,last_name,full_name,no_of_yrs_of_exp,linkdin_url,date_joined, profile completion percentage,   
-        #date joined,last login
+        model = Profile
+        fields = ['name', 'username', 'email', 'phone_number', 'address', 'country']
+
+    def update(self, instance, validated_data):
+        # Remove read-only fields if present in the request data
+        validated_data.pop('user', None)  # Handles nested user data if mistakenly sent
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
 class ResumeSkillSerializer(serializers.ModelSerializer):

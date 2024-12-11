@@ -1,24 +1,57 @@
 @import url('color-schemes.css');
 
+.body{
+    background-color: var(--col1);
+    color: var(--col4);
+    overflow: auto;
+    align-items: center;
+    justify-content: center;
+}
+
 .card {
-  width: 85%;
-  height: 100%;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-left: 50px;
+  width: 90%;
+  height: 90%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 8px 0 var(--col3);
   font-size: 20px;
   list-style-type: none;
-  background-color: rgba(0, 0, 0, 0.2); 
+  background-color: var(--col2);
   color: var(--col4);  
-  border: 2px solid rgba(1, 1, 1, 0.2); 
+  border: 2px solid var(--col5);
 }
 
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  background-color: var(--col5); 
+  box-shadow: 0 8px 16px 0 var(--col5);
+  background-color: var(--col5);
 }
 
 .container {
   display: flex;
   flex-direction: column;
   background-color: var(--col2); 
+}
+
+.card-p{
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: var(--col4);
+}
+
+.card-date{
+  justify-content: center;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--col4);
+}
+
+.card-headers{
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--col4);
+
 }

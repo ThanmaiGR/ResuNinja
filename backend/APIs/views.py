@@ -4,11 +4,13 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import ProfileSerializer, ResumeSerializer
 from .functions import LLM, jsonify
-from .models import Resume, ResumeSkill, UserSkill, Questionnaire, Feedback
+from .models import Profile, Resume, ResumeSkill, UserSkill, Questionnaire, Feedback
+from django.contrib.auth.models import User
 from rest_framework import status
 import os
 import tempfile
 import json
+import re
 
 
 class UserProfileView(APIView):
@@ -18,8 +20,27 @@ class UserProfileView(APIView):
         """
         Retrieve the authenticated user's username and email.
         """
-        serializer = ProfileSerializer(request.user)
+        try:
+            profile = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            return Response({"detail": "Profile not found."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ProfileSerializer(profile)
         return Response(serializer.data)
+
+    def put(self, request):
+        """
+        Update the authenticated user's profile.
+        """
+        try:
+            profile = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            return Response({"detail": "Profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()  # This will update only Profile fields
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UploadResumeView(APIView):
@@ -317,7 +338,6 @@ class GenerateOverallFeedbackView(APIView):
             all_feedback = {}
             keys_to_clear = []
             all_skills = []
-            skills = request.data.get('skills')
             for key, value in request.session.items():
                 if key.startswith("feedback_"):
                     skill_name = key.split("feedback_")[1]
@@ -370,6 +390,19 @@ class AllFeedbacks(APIView):
         """
         feedbacks = Feedback.objects.filter(user=request.user)
         feedback_data = []
-        for feedback in feedbacks:
-            feedback_data.append(feedback.feedback_content)
-        return Response({"feedbacks": feedback_data}, status=status.HTTP_200_OK)
+        feedback_dates = []
+        for idx, feedback in enumerate(feedbacks):
+            # print(feedback.feedback_content)
+            data = feedback.feedback_content
+            try:
+                cleaned_data = re.sub(r"'", '"', data)
+                cleaned_data = re.sub(r'(\w+):', r'"\1":', cleaned_data)
+                cleaned_data = re.sub(r"\s+", " ", cleaned_data)
+                feed_dict = json.loads(cleaned_data)
+                feedback_data.append(feed_dict)
+                date_time = feedback.datetime
+                date_time = date_time.strftime("%H:%M %d-%m-%Y")
+                feedback_dates.append(date_time)
+            except :
+                print("Error for idx", idx)
+        return Response({"feedbacks": feedback_data, "dates": feedback_dates}, status=status.HTTP_200_OK)
