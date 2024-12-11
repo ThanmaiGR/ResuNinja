@@ -43,7 +43,6 @@ const useRequest = () => {
                     navigate('/login');
                 }
             } else {
-                // console.log()
                 return Promise.reject(error);
             }
         }

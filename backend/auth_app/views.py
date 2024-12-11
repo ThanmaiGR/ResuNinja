@@ -9,6 +9,7 @@ from auth_app import serializers
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+from APIs.models import Profile
 
 
 class RegisterView(APIView):
@@ -17,6 +18,7 @@ class RegisterView(APIView):
         serializer = serializers.UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        Profile.objects.create(user=user)
         refresh = RefreshToken.for_user(user)
         data = {
             'username': serializer.data.get('username'),

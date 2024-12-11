@@ -12,5 +12,6 @@ urlpatterns = [
     path('generate-feedback/', GenerateFeedbackView.as_view(), name='generate-feedback'),
     path('generate-overall-feedback/', GenerateOverallFeedbackView.as_view(), name='generate-overall-feedback'),
     path('get-feedback/', AllFeedbacks.as_view(), name='get-feedback'),
+
 ]
 
