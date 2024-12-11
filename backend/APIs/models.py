@@ -16,11 +16,21 @@ class Resume(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='resume')
     skills = models.ManyToManyField('UserSkill', related_name='resumes')
     certifications = models.TextField(blank=True, null=True)
-    projects = models.TextField(blank=True, null=True)
+    projects = models.ManyToManyField('Project', related_name='resumes')
     upload_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username}'s Resume"
+
+
+class Project(models.Model):
+    title = models.CharField(max_length=100)
+    tech_stack = models.TextField()
+    description = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projects')
+
+    def __str__(self):
+        return self.title
 
 
 # Model to store individual skills
@@ -55,6 +65,7 @@ class Feedback(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedbacks')
     datetime = models.DateTimeField(auto_now_add=True)
     feedback_content = models.TextField(blank=True, null=True)
+    feedback_type = models.CharField(max_length=100, default='Technical')
 
     def __str__(self):
         return f"Feedback for {self.user.username} on {self.datetime} is {self.feedback_content}"

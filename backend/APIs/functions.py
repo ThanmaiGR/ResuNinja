@@ -65,6 +65,7 @@ class LLM:
         """
         prompt = f"""Parse the given resume and return valid JSON format, ensuring proper syntax
         Extract only Certifications, Work Experience, Skills and Projects.
+        Projects must be split into title, tech_stack, and description.
         {text}
         """
         return self.flash.generate_content(prompt).text
@@ -82,13 +83,16 @@ class LLM:
         '''
         return self.flash.generate_content(prompt).text
     
-    def generate_project_questionnaire(self, projectName, projects):
+    def generate_project_questionnaire(self, projectName, tech_stack, description):
         """
-        Generates a questionnaire for a given skill.
-        :param skill: Skill for which to generate the questionnaire.
+        Generates a questionnaire for a project.
+        :param projectName: Name of the project.
+        :param tech_stack: Technologies used in the project.
+        :param description: Description of the project.
         :return: Generated questionnaire.
         """
-        prompt = f''' Generate 5 questions for the project:{projectName}. Project description is {projects}. Use this project description to generate question based on the implementation of the project and the tech stack used. Questions should be similar to what could be asked in a technical interview.
+        prompt = f''' Generate 5 questions for the project:{projectName}. The Project uses technologies like {tech_stack} and has the following description: {description}.
+        Generate the questions like you would for a technical interview. If there is no tech_stack or description, ask questions regarding tech stack used and project description.
         Return valid JSON format, ensuring proper syntax.
         The questions should be of a rating from 1 to 5, 1 being lowest and 5 being highest difficulty. Do not generate any other text
         Question:

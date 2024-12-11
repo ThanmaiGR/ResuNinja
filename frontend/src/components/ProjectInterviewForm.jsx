@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/InterviewForm.css";
 import UseRequest from "../routes/UseRequest";
-const InterviewForm = (props) => {
+const ProjectInterviewForm = (props) => {
     const sendRequest = UseRequest();
     const [data, SetData] = useState({
         questions: [],
@@ -11,9 +11,10 @@ const InterviewForm = (props) => {
     const [isAnswered, setIsAnswered] = useState(true);
 
 
-    const fetchQuestions = async (skill) => {
+    const fetchQuestions = async (title) => {
         try {
-            const response = await sendRequest("POST", `http://localhost:8000/api/generate-project-questionnaire/`, );
+            console.log("Fetching questions for project:", title);
+            const response = await sendRequest("POST", `http://localhost:8000/api/generate-project-questionnaire/`, {title});
             const { questionnaire } = response;
 
             // Transform the questionnaire to extract questions and ratings
@@ -34,13 +35,13 @@ const InterviewForm = (props) => {
     useEffect(() => {
         // Reset questions and answers when skill changes
         SetData({
-            questions: ['Question 1', 'Question 2', 'Question 3'],
+            questions: [],
             answers: []
         });
         setCurrentQuestion(0);
         setIsAnswered(true);
         // Fetch new questions when the component mounts or skill changes
-        // fetchQuestions();
+        fetchQuestions(props.project);
         setCurrentQuestion(0); // Reset to the first question
         console.log("DATA", data);
     }, [props.project]);
@@ -106,4 +107,4 @@ const InterviewForm = (props) => {
     );
 };
 
-export default InterviewForm;
+export default ProjectInterviewForm;

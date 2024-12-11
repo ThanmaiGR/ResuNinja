@@ -7,6 +7,7 @@ const Feedback = () => {
     const sendRequest = useRequest();
     const [feedback, setFeedback] = useState([]);
     const [dates, setDates] = useState([])
+    const [type, setType] = useState([])
     useEffect( () => {
 
         const fetchData = async () => {
@@ -15,6 +16,7 @@ const Feedback = () => {
                 // console.log(response)
                 setFeedback(response.feedbacks)
                 setDates(response.dates)
+                setType(response.type)
             } catch (e) {
                 console.log(e)
             }
@@ -35,7 +37,8 @@ const Feedback = () => {
                     {
                         feedback.map(
                             (feed, index) => <li key={index} className='card'>
-                                <h2 className='card-date'>Generated at {dates[index]}</h2>
+                                <h2 className='card-title'>Generated at {dates[index]}</h2>
+                                <h3 className='card-title'>Type: {type[index]}</h3>
                                 <hr/>
                                 <h3 className='card-headers'>General Feedback</h3>
                                 <p className='card-p'>{feed.general_feedback} </p>

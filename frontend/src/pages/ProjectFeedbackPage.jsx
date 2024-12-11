@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import UseRequest from "../routes/UseRequest";
 import "../styles/InterviewFeedbackPage.css";
 
-const InterviewFeedbackPage = () => {
+const ProjectFeedbackPage = () => {
     const sendRequest = UseRequest();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ const InterviewFeedbackPage = () => {
         const fetchFeedback = async () => {
             try {
                 setLoading(true);
-                const response = await sendRequest("POST", "http://localhost:8000/api/generate-overall-feedback/", {type: "skill"});
+                const response = await sendRequest("POST", "http://localhost:8000/api/generate-overall-feedback/", {type: 'project'});
 
                 if (!response) {
                     setError("No feedback available");
@@ -54,7 +54,7 @@ const InterviewFeedbackPage = () => {
         <b className='body'>
             <h2>{loading && <p>Loading feedback...</p>}</h2>
             <h3>{error && <p>Error fetching feedback: {error}</p>}</h3>
-            <div>
+            {!loading && <div>
                 {/* Overall Feedback */}
                 <div className="overall-feedback">
                     <h3>Overall Feedback</h3>
@@ -105,7 +105,7 @@ const InterviewFeedbackPage = () => {
                 <hr/>
                 {/* Feedback on Skills */}
                 <div className="feedback">
-                    <h3>Feedback on Skills</h3>
+                    <h3>Feedback on Projects</h3>
                     <ul>
                         {resp.all_skills.map((skill, index) => {
                             console.log(skill)
@@ -142,8 +142,9 @@ const InterviewFeedbackPage = () => {
                     </ul>
                 </div>
             </div>
+            }
         </b>
     );
 };
 
-export default InterviewFeedbackPage;
+export default ProjectFeedbackPage;

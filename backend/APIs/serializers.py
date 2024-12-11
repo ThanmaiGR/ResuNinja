@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Resume, UserSkill, ResumeSkill, Questionnaire, Feedback
+from .models import Resume, UserSkill, ResumeSkill, Questionnaire, Feedback, Project
 from django.contrib.auth.models import User
 from APIs.models import Profile
 
@@ -25,6 +25,14 @@ class ResumeSkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResumeSkill
         fields = ['id', 'name']
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = Project
+        fields = ['id', 'title', 'tech_stack', 'description', 'user']
 
 
 class ResumeSerializer(serializers.ModelSerializer):
