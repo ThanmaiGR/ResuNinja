@@ -13,6 +13,7 @@ const ProfileForm = (props) => {
         phone_number: '',
         country: '',
     })
+    const [error, setError] = useState(null)
     const navigate = useNavigate();
     const { addAlert } = useAlert();
 
@@ -48,8 +49,10 @@ const ProfileForm = (props) => {
                     email: user.email,
                 })
             addAlert("User details updated successfully", "success")
+            setError(null)
         }catch (e)
         {
+            console.log("ERROR", e)
             addAlert(e.message, "error")
         }
     }

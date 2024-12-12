@@ -1,5 +1,14 @@
 @import url('color-schemes.css');
 
+.profile-form-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 80%;
+}
+
 .input-box {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -15,7 +24,7 @@
 }
 
 .profile-form {
-    height: 75%;
+    /*height: 75%;*/
     width: 80%;
     display: flex;
     flex-direction: column;
@@ -31,22 +40,26 @@
     color: white;
     background-color: var(--col5);
     width: 25%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px 0 var(--col4);
 }
 
 .feedback-button:hover {
     background-color: var(--col2);  
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px 0 var(--col4);
 }
 
 .state--value {
-    background-color: var(--col4);  
+    background-color: var(--col3);
     height: 75px;
     width: 75px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--col5);  
+    color: var(--col1);
     cursor: pointer;
+}
+
+.state--value:hover {
+    background-color: var(--col5);
 }

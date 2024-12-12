@@ -50,11 +50,13 @@ const InterviewFeedbackPage = () => {
         fetchFeedback();
     }, []);
 
+    if (error) {
+        return <h3>{error && <p>Error fetching feedback: {error}</p>}</h3>
+    }
     return (
         <b className='body'>
             <h2>{loading && <p>Loading feedback...</p>}</h2>
-            <h3>{error && <p>Error fetching feedback: {error}</p>}</h3>
-            <div>
+            {!loading && <div>
                 {/* Overall Feedback */}
                 <div className="overall-feedback">
                     <h3>Overall Feedback</h3>
@@ -142,6 +144,7 @@ const InterviewFeedbackPage = () => {
                     </ul>
                 </div>
             </div>
+            }
         </b>
     );
 };

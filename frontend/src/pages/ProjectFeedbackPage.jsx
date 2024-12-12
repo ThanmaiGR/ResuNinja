@@ -50,10 +50,13 @@ const ProjectFeedbackPage = () => {
         fetchFeedback();
     }, []);
 
+    if (error) {
+        return <h3>{error && <p>Error fetching feedback: {error}</p>}</h3>
+
+    }
     return (
         <b className='body'>
             <h2>{loading && <p>Loading feedback...</p>}</h2>
-            <h3>{error && <p>Error fetching feedback: {error}</p>}</h3>
             {!loading && <div>
                 {/* Overall Feedback */}
                 <div className="overall-feedback">

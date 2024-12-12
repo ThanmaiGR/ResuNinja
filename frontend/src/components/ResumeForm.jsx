@@ -8,6 +8,8 @@ const ResumeForm = () => {
     const sendRequest = useRequest();
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
+    const [skillError, setSkillError] = useState(null);
+    const [projectError, setProjectError] = useState(null);
     const [skills, setSkills] = useState([]);
     const [projects, setProjects] = useState([]);
     const [input, setInput] = useState('');
@@ -60,9 +62,11 @@ const ResumeForm = () => {
             e.preventDefault();
             const skill = input;
             await sendRequest('PUT', 'http://localhost:8000/api/add-skill/', { skill });
+            setSkillError(null);
             setSkills([...skills, input]);
             setInput('');
         } catch (err) {
+            setSkillError("Failed to add skill. Please try again.");
             console.error("Skills update error:", err);
         }
     };
@@ -74,7 +78,9 @@ const ResumeForm = () => {
             await sendRequest('PUT', 'http://localhost:8000/api/add-project/', { title: project });
             setProjects([...projects, projectInput]);
             setProjectInput('');
+            setProjectError(null);
         } catch (err) {
+            setProjectError("Failed to add project. Please try again.");
             console.error("Projects update error:", err);
         }
     };
@@ -83,10 +89,12 @@ const ResumeForm = () => {
         try {
             const skillToDelete = skills[index];
             await sendRequest('DELETE', 'http://localhost:8000/api/add-skill/', { skill: skillToDelete });
+            setSkillError(null);
             setSkills(skills.filter((_, i) => i !== index)); // Update state only after successful deletion
+
         } catch (err) {
+            setSkillError("Failed to delete the skill. Please try again.");
             console.error("Skill deletion error:", err);
-            setError("Failed to delete the skill. Please try again.");
         }
     };
 
@@ -96,9 +104,10 @@ const ResumeForm = () => {
             const projectToDelete = projects[index];
             await sendRequest('DELETE', 'http://localhost:8000/api/add-project/', { title: projectToDelete });
             setProjects(projects.filter((_, i) => i !== index)); // Update state only after successful deletion
+            setProjectError(null);
         } catch (err) {
+            setProjectError("Failed to delete the project. Please try again.");
             console.error("Project deletion error:", err);
-            setError("Failed to delete the project. Please try again.");
         }
     };
 
@@ -121,90 +130,97 @@ const ResumeForm = () => {
 
     return (
         <div className="resume-form-div">
-            <form onSubmit={handleFileUpload} className="resume-form">
-                <fieldset className="resume-form-fieldset">
-                    <legend className="resume-form-legend">Upload Resume</legend>
-                    {error && <p>{error}</p>}
-                    <input
-                        className="resume-form-input"
-                        type="file"
-                        onChange={handleFileChange}
-                    />
-                    {loading ? <p>Uploading and Processing Resume...</p> : null}
-                    <button type="submit" className="resume-form-button">Upload</button>
-                </fieldset>
-            </form>
-
-            <form className="resume-form" onSubmit={handleSkillsUpload}>
-                <fieldset className="resume-form-fieldset">
-                    <legend className="resume-form-legend">Your Skills</legend>
-                    <input
-                        className="resume-form-input"
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Add skill"
-                    />
-                    <ul className="resume-form-ul">
-                        {skills && skills.sort().map((skill, index) => (
-                            <div className='skill-div'>
-                                <li key={index} className="resume-form-li">{skill}</li>
-                                <button
-                                    className="delete-skill-button"
-                                    onClick={(e) => {
-                                        e.preventDefault(); // Prevent page reload
-                                        handleDeleteSkill(index);
-                                    }}
-                                >
-                                    &times;
-                                </button>
-
-                            </div>
-                        ))}
-                    </ul>
-                </fieldset>
-                <button type="submit" className="resume-form-button">Add Skills</button>
-            {skills.length > 0 && (
-                <button onClick={interview} className="resume-form-button">Proceed to interview</button>
-                    )}
-            </form>
-
-
-            <form className="resume-form" onSubmit={handleProjectUpload}>
-                <fieldset className="resume-form-fieldset">
-                    <legend className="resume-form-legend">Your Projects</legend>
-                    <input
-                        className="resume-form-input"
-                        type="text"
-                        value={projectInput}
-                        onChange={(e) => setProjectInput(e.target.value)}
-                        placeholder="Add project"
-                    />
-                    <ul className="resume-form-ul">
-
-                        {projects && projects.sort().map((project, index) => (
-                            <div className='skill-div'>
-                                <li key={index} className="resume-form-li">{project}</li>
-                                <button
-                                    className="delete-skill-button"
-                                    onClick={(e) => {
-                                        e.preventDefault(); // Prevent page reload
-                                        handleDeleteProject(index);
-                                    }}
-                                >
-                                    &times;
-                                </button>
-
-                            </div>
-                        ))}
-                    </ul>
+            <div className="resume-form-header">
+                <form onSubmit={handleFileUpload} className="resume-form">
+                    <fieldset className="resume-form-fieldset">
+                        <legend className="resume-form-legend">Upload Resume</legend>
+                        {error && <p>{error}</p>}
+                        <input
+                            className="resume-form-input"
+                            type="file"
+                            onChange={handleFileChange}
+                        />
+                        {loading ? <p>Uploading and Processing Resume...</p> : null}
+                        <button type="submit" className="resume-form-button">Upload</button>
                     </fieldset>
+                </form>
+            </div>
 
-                    <button type="submit" className="resume-form-button">Add Project</button>
-                    {projects.length > 0 && (
-                        <button onClick={projectinterview} className="resume-form-button">Proceed to Project interview</button>
-                    )}
-            </form>
+            <div className="resume-form-header">
+                <form className="resume-form" onSubmit={handleSkillsUpload}>
+                    <fieldset className="resume-form-fieldset">
+                        <legend className="resume-form-legend">Your Skills</legend>
+                        {skillError && <p>{skillError}</p>}
+                        <input
+                            className="resume-form-input"
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Add skill"
+                        />
+                        <ul className="resume-form-ul">
+                            {skills && skills.sort().map((skill, index) => (
+                                <div className='skill-div'>
+                                    <li key={index} className="resume-form-li">{skill}</li>
+                                    <button
+                                        className="delete-skill-button"
+                                        onClick={(e) => {
+                                            e.preventDefault(); // Prevent page reload
+                                            handleDeleteSkill(index);
+                                        }}
+                                    >
+                                        &times;
+                                    </button>
+
+                                </div>
+                            ))}
+                        </ul>
+                    </fieldset>
+                    <button type="submit" className="resume-form-button">Add Skills</button>
+                {skills.length > 0 && (
+                    <button onClick={interview} className="resume-form-button">Proceed to interview</button>
+                        )}
+                </form>
+            </div>
+
+            <div className="resume-form-header">
+                <form className="resume-form" onSubmit={handleProjectUpload}>
+                    <fieldset className="resume-form-fieldset">
+                        <legend className="resume-form-legend">Your Projects</legend>
+                        {projectError && <p>{projectError}</p>}
+                        <input
+                            className="resume-form-input"
+                            type="text"
+                            value={projectInput}
+                            onChange={(e) => setProjectInput(e.target.value)}
+                            placeholder="Add project"
+                        />
+                        <ul className="resume-form-ul">
+
+                            {projects && projects.sort().map((project, index) => (
+                                <div className='skill-div'>
+                                    <li key={index} className="resume-form-li">{project}</li>
+                                    <button
+                                        className="delete-skill-button"
+                                        onClick={(e) => {
+                                            e.preventDefault(); // Prevent page reload
+                                            handleDeleteProject(index);
+                                        }}
+                                    >
+                                        &times;
+                                    </button>
+
+                                </div>
+                            ))}
+                        </ul>
+                        </fieldset>
+
+                        <button type="submit" className="resume-form-button">Add Project</button>
+                        {projects.length > 0 && (
+                            <button onClick={projectinterview} className="resume-form-button">Proceed to Project interview</button>
+                        )}
+                </form>
+            </div>
         </div>
     );
 };

@@ -11,6 +11,7 @@ const InterviewPage = () => {
     const [hasStarted, setHasStarted] = useState(false);
     const [currentProject, setCurrentProject] = useState(0);
     const [allProjects, setAllProjects] = useState([]); // All retrieved skills
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -46,8 +47,9 @@ const InterviewPage = () => {
     const handleCompleteProject =  async (data) => {
         console.log(`Answers for ${projects[currentProject]}:`, data);
         try{
-            const feedback = await sendRequest("POST", "http://localhost:8000/api/generate-feedback/", {title: projects[currentProject], answers: data.answers, questions: data.questions, type: "project"});
-            console.log(feedback);
+            setLoading(true);
+            await sendRequest("POST", "http://localhost:8000/api/generate-feedback/", {title: projects[currentProject], answers: data.answers, questions: data.questions, type: "project"});
+            setLoading(false);
         } catch (error) {
             console.error("Error:", error);
         }
@@ -70,9 +72,14 @@ const InterviewPage = () => {
         }
     };
 
-    if (!hasStarted && allProjects.length === 0) {
+    if (!hasStarted && allProjects.length === 0 && !loading) {
         navigate("/resume"); // Redirect to the resume page if no skills are available
     }
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
             {!hasStarted ? (

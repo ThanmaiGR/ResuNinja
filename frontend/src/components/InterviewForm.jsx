@@ -8,13 +8,16 @@ const InterviewForm = (props) => {
         ratings: [],
         answers: []
     });
+    const [loading, setLoading] = useState(true);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [isAnswered, setIsAnswered] = useState(true);
 
 
     const fetchQuestions = async (skill) => {
         try {
+            setLoading(true);
             const response = await sendRequest("POST", `http://localhost:8000/api/generate-questionnaire/`, {skill});
+            setLoading(false);
             const { questionnaire } = response;
             // Transform the questionnaire to extract questions and ratings
             const questions = questionnaire.map(item => item.question);
@@ -75,6 +78,9 @@ const InterviewForm = (props) => {
             };
         });
     };
+    if (loading) {
+        return <p>Generating Questions. Please Wait...</p>;
+    }
 
     return (
         <form onSubmit={handleNextQuestion} className="interview-form">
@@ -95,6 +101,7 @@ const InterviewForm = (props) => {
                     value={data.answers[currentQuestion] || ""}
                     className="interview-form-textarea"
                     onChange={handleChange}
+                    placeholder="Type your answer here..."
                 />
 
                 <button type="submit" className="interview-form-button">
