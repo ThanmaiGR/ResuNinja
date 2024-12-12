@@ -1,15 +1,29 @@
 @import url('color-schemes.css');
 
 .resume-form-div{
+    height: 90%;
+    width: 80%;
     padding: 10px;
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: center;
     margin: 10px;
-    /*flex-direction: column;*/
-    max-height: 90vh;
+    flex-direction: column;
 }
+
+/*.resume-form-header{*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    margin: 10px;*/
+/*    padding: 10px;*/
+/*    background: var(--col2);*/
+/*    color: var(--col4);*/
+/*    border-radius: 5px;*/
+/*}*/
+
 .resume-form {
+    /*max-height: 30%;*/
     background-color: var(--col1);
     color: var(--col3);
     display: flex;
@@ -18,18 +32,22 @@
     align-items: center;
     padding: 40px;
     margin: 30px auto;
-    width: 400px;
+    width: 100%;
     border-radius: 10px;
     box-shadow: 0 24px 24px var(--col2);
 }
 
 .resume-form-fieldset{
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        width: 100%;
+        flex-direction: row;
         overflow: auto;
-        max-height: 50vh;
 
 }
 .resume-form-input {
-    width: 300px;
+    /*width: 300px;*/
+    width: 90%;
     height: 30px;
     margin: 20px;
     padding: 5px;

@@ -9,12 +9,13 @@ const ProjectInterviewForm = (props) => {
     });
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [isAnswered, setIsAnswered] = useState(true);
-
+    const [loading, setLoading] = useState(true);
 
     const fetchQuestions = async (title) => {
         try {
-            console.log("Fetching questions for project:", title);
+            setLoading(true);
             const response = await sendRequest("POST", `http://localhost:8000/api/generate-project-questionnaire/`, {title});
+            setLoading(false);
             const { questionnaire } = response;
 
             // Transform the questionnaire to extract questions and ratings
@@ -76,6 +77,10 @@ const ProjectInterviewForm = (props) => {
         });
     };
 
+    if (loading) {
+        return <p>Generating Questions. Please Wait...</p>;
+    }
+
     return (
         <>
         <form onSubmit={handleNextQuestion} className="interview-form">
@@ -95,6 +100,7 @@ const ProjectInterviewForm = (props) => {
                     value={data.answers[currentQuestion] || ""}
                     className="interview-form-textarea"
                     onChange={handleChange}
+                    placeholder={"Type your answer here..."}
                 />
 
                 <button type="submit" className="interview-form-button">

@@ -4,45 +4,37 @@ import { useNavigate } from 'react-router-dom';
 const useRequest = () => {
     const navigate = useNavigate();
 
-    const sendRequest = async (method, url, data = {}, headers = null) => {
-        // console.log("method", method)
-        // console.log("url", url)
-        console.log("data", data)
-
-        const access_token = localStorage.getItem('access_token');
-        const refresh_token = localStorage.getItem('refresh_token');
-        if (!(access_token && refresh_token)) {
-            navigate('/login');
-            return null;
-        }
-
+    const sendRequest = async (method, url, data = {}, headers = {}) => {
         try {
+            // Send the original request
             const response = await axios.request({
                 method: method,
                 url: url,
-                withCredentials: true,
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    // 'Content-Type': 'application/json',
-                    ...headers,
-                },
+                withCredentials: true, // Ensures cookies are included
+                headers: headers,
                 data: data,
             });
-            console.log(response)
             return response.data;
         } catch (error) {
+            console.log(error.response.status)
             if (error.response && error.response.status === 401) {
                 try {
-                    const refreshResponse = await axios.post('http://localhost:8000/auth/refresh/', {
-                        refresh: refresh_token,
-                    });
-                    localStorage.setItem('access_token', refreshResponse.data.access);
+                    // Attempt to refresh the token
+                    await axios.post(
+                        'http://localhost:8000/auth/refresh/',
+                        {},
+                        { withCredentials: true } // Send cookies for refresh
+                    );
+
                     // Retry the original request
                     return sendRequest(method, url, data, headers);
                 } catch (refreshError) {
+                    // If refresh fails, redirect to login
                     navigate('/login');
                 }
             } else {
+                // Handle other errors
+                navigate('/login');
                 return Promise.reject(error);
             }
         }

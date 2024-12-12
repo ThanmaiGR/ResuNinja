@@ -6,6 +6,7 @@ from .serializers import ProfileSerializer, ResumeSerializer
 from .functions import LLM, jsonify
 from .models import Profile, Resume, ResumeSkill, UserSkill, Questionnaire, Feedback, Project
 from django.contrib.auth.models import User
+from django.utils.timezone import localtime
 from rest_framework import status
 import os
 import tempfile
@@ -275,17 +276,6 @@ class GenerateQuestionnaireView(APIView):
             return Response({"error": f"Failed to generate questionnaire: {str(e)}"},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # def map_complexity(self, rating):
-    #     """
-    #     Map numeric rating to a complexity label.
-    #     """
-    #     if rating == 1:
-    #         return "easy"
-    #     elif rating in [2, 3]:
-    #         return "medium"
-    #     else:
-    #         return "hard"
-
 
 class GenerateProjectQuestionnaireView(APIView):
     permission_classes = [IsAuthenticated]
@@ -426,21 +416,15 @@ class GenerateOverallFeedbackView(APIView):
             llm = LLM('gemini-1.5-flash')
             # Clear the session keys used for feedback storage
 
-            # for key in keys_to_clear:
-            #     if key.startswith("feedback_"):
-            #         del request.session[key]
+            for key in keys_to_clear:
+                if key.startswith(session_key):
+                    del request.session[key]
 
             # Use the LLM function to generate overall feedback
             overall_feedback = llm.generate_overall_feedback(all_feedback)
 
             overall_feedback = jsonify(overall_feedback)
-            # print(overall_feedback)
-            # quantitative_summary = overall_feedback.get("Quantitative Summary")
-            # quantitative_summary = jsonify(quantitative_summary)
-            # overall_feedback["Summary"] = quantitative_summary
-            # for key, value in overall_feedback.items():
-            #     print(key, value)
-            # print(overall_feedback)
+
             Feedback.objects.create(
                 user=request.user,  # Store the feedback for the logged-in user
                 feedback_content=overall_feedback,  # Store the generated feedback
@@ -499,6 +483,7 @@ class AllFeedbacks(APIView):
                 # print(feed_dict['strengths'])
                 feedback_data.append(feed_dict)
                 date_time = feedback.datetime
+                date_time = localtime(date_time)
                 date_time = date_time.strftime("%H:%M %d-%m-%Y")
                 feedback_dates.append(date_time)
                 feedback_type.append(feed_type)

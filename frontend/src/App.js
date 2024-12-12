@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './styles/App.css';
 import Sidebar from "./components/Sidebar";
 import AppRoutes from './routes/AppRoutes';
@@ -8,6 +7,7 @@ import React from'react';
 import { AlertProvider } from './context/AlertContext';
 import { UserProvider } from './context/UserContext'; // Import UserProvider
 function App() {
+
   return (
     <BrowserRouter>
       <UserProvider> {/* Wrap the app with UserProvider */}
